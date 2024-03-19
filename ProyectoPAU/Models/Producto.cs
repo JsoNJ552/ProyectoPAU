@@ -13,5 +13,9 @@ public partial class Producto
 
     public string Tipo { get; set; }
 
+    public int? IdCategoria { get; set; }
+
     public virtual ICollection<DetalleVenta> DetalleVenta { get; set; } = new List<DetalleVenta>();
+
+    public virtual CategoriaProducto IdCategoriaNavigation { get; set; }
 }

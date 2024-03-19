@@ -15,6 +15,8 @@ public partial class TiendauContext : DbContext
     {
     }
 
+    public virtual DbSet<CategoriaProducto> CategoriaProductos { get; set; }
+
     public virtual DbSet<DetalleVenta> DetalleVenta { get; set; }
 
     public virtual DbSet<ErroresDePrograma> ErroresDeProgramas { get; set; }
@@ -32,13 +34,23 @@ public partial class TiendauContext : DbContext
     public virtual DbSet<Venta> Venta { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-
-    }
-
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=JIM3N3Z; DataBase=TIENDAU; Trusted_Connection=True; TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<CategoriaProducto>(entity =>
+        {
+            entity.HasKey(e => e.IdCategoria).HasName("PK__Categori__02AA0785E79862D2");
+
+            entity.ToTable("CategoriaProducto");
+
+            entity.Property(e => e.IdCategoria)
+                .ValueGeneratedNever()
+                .HasColumnName("ID_Categoria");
+            entity.Property(e => e.Nombre).HasMaxLength(50);
+        });
+
         modelBuilder.Entity<DetalleVenta>(entity =>
         {
             entity.HasKey(e => e.IdDetalleVenta).HasName("PK__DetalleV__0157010AC65BB137");
@@ -104,6 +116,7 @@ public partial class TiendauContext : DbContext
             entity.Property(e => e.IdProducto)
                 .ValueGeneratedNever()
                 .HasColumnName("ID_Producto");
+            entity.Property(e => e.IdCategoria).HasColumnName("ID_Categoria");
             entity.Property(e => e.Nombre)
                 .HasMaxLength(255)
                 .IsUnicode(false)
@@ -113,6 +126,10 @@ public partial class TiendauContext : DbContext
                 .HasMaxLength(255)
                 .IsUnicode(false)
                 .HasColumnName("tipo");
+
+            entity.HasOne(d => d.IdCategoriaNavigation).WithMany(p => p.Productos)
+                .HasForeignKey(d => d.IdCategoria)
+                .HasConstraintName("FK__Producto__ID_Cat__628FA481");
         });
 
         modelBuilder.Entity<Rol>(entity =>
