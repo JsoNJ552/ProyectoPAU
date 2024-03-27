@@ -1,0 +1,148 @@
+﻿@{
+    ViewData["Title"] = "Agregar";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Estilos {
+    <link rel="stylesheet" href="~/css/ProductoDetalle.css" />
+}
+
+<div class="container">
+    <div class=" text-center mt-5 ">
+        <h1>Agregar Productos</h1>
+    </div>
+
+    <div class="row ">
+        <div class="col-lg-7 mx-auto">
+            <div class="card mt-2 mx-auto p-4 bg-light">
+                <div class="card-body bg-light">
+                    <div class="container">
+                        <form id="formularioProducto" enctype="multipart/form-data">
+                            <div class="controls">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre:</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del producto">
+                                </div>
+                                <div class="form-group">
+                                    <label for="precio">Precio:</label>
+                                    <input type="number" class="form-control" id="precio" name="precio" placeholder="Ingrese el precio del producto">
+                                </div>
+                                <div class="form-group">
+                                    <label for="tipo">Tipo:</label>
+                                    <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ingrese el tipo del producto">
+                                </div>
+                                <div class="form-group">
+                                    <label for="categoria">Categoría:</label>
+                                    <select class="form-control" id="categoria" name="categoria">
+                                        <option value="">Selecciona una categoría</option>
+                                        @foreach (var categoria in ViewData["Categorias"] as List<CategoriaProducto>)
+                                        {
+                                            <option id="categoria" name="categoria" value="@categoria.IdCategoria">@categoria.Nombre</option>
+                                        }
+                                    </select>
+
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="descripcion">Descripción:</label>
+                                    <textarea class="form-control" id="descripcion" name="descripcion" rows="3" placeholder="Ingrese la descripción del producto"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="detalles">Detalles:</label>
+                                    <textarea class="form-control" id="detalles" name="detalles" rows="3" placeholder="Ingrese los detalles del producto"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="marca">Marca:</label>
+                                    <input type="text" class="form-control" id="marca" name="marca" placeholder="Ingrese la marca del producto">
+                                </div>
+                                <div class="form-group">
+                                    <label for="foto">Foto:</label>
+                                    <input type="file" class="form-control" id="photoFile" name="photoFile" placeholder="Seleccione la foto del producto">
+                                </div>
+
+                                <div class="row mt-2">
+                                    <div class="col">
+
+                                        <button type="submit" class="btn btn-dark btn-send pt-2 btn-block">Guardar </button>
+                                        
+
+                                    </div>
+                                   
+
+                                    <div class="col">
+
+                                        <a href="@Url.Action("Index")" class="btn btn-light btn-send pt-2 btn-block">Volver</a>
+
+
+                                    </div>
+
+                                </div>
+
+
+                                
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+
+    <script>
+
+        function mostrarFoto(input) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#previewFoto').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+
+
+        $(document).ready(function () {
+            $('#formularioProducto').submit(function (event) {
+                event.preventDefault();
+
+                var formData = new FormData();
+                formData.append('nombre', $('#nombre').val());
+                formData.append('precio', $('#precio').val());
+                formData.append('tipo', $('#tipo').val());
+                formData.append('IdCategoria', $('#categoria').val());
+                formData.append('descripcion', $('#descripcion').val());
+                formData.append('detalles', $('#detalles').val());
+                formData.append('marca', $('#marca').val());
+                formData.append('photoFile', $('#photoFile')[0].files[0]);
+
+                $.ajax({
+                    url: '@Url.Action("RegistrarProducto", "Producto")',
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (response) {
+                        // Mostrar SweetAlert de éxito
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Éxito!',
+                            text: 'Producto registrado correctamente.'
+                        });
+                        $('#formularioProducto')[0].reset();
+                    },
+                    error: function (xhr, status, error) {
+                        // Mostrar SweetAlert de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: '¡Error!',
+                            text: 'Hubo un problema al registrar el producto.'
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+}

@@ -2,11 +2,10 @@
 
 namespace ProyectoPAU.Controllers
 {
-    public class LoginController : Controller
+    public class CategoriaController : Controller
     {
         public IActionResult Index()
         {
-            
             return View();
         }
     }

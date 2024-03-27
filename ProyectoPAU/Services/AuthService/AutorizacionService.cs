@@ -10,7 +10,7 @@ using System.Net;
 using System.Security.Cryptography;
 using Microsoft.EntityFrameworkCore;
 
-namespace ProyectoPAU.Services
+namespace ProyectoPAU.Services.Auth
 {
     public class AutorizacionService : IAutorizacionService
 
@@ -24,7 +24,7 @@ namespace ProyectoPAU.Services
             _configuration = configuration;
         }
 
-        private String GenerarToken(string idUsuario)
+        private string GenerarToken(string idUsuario)
         {
             var key = _configuration.GetValue<string>("JwtSettings:key");
             var keyBytes = Encoding.ASCII.GetBytes(key);
@@ -62,7 +62,7 @@ namespace ProyectoPAU.Services
             var refreshToken = "";
 
 
-            using(var rng = RandomNumberGenerator.Create())
+            using (var rng = RandomNumberGenerator.Create())
             {
                 rng.GetBytes(byteArray);
                 refreshToken = Convert.ToBase64String(byteArray);
@@ -74,7 +74,7 @@ namespace ProyectoPAU.Services
         }
 
 
-        
+
 
 
 
@@ -92,14 +92,14 @@ namespace ProyectoPAU.Services
                 FechaExpiracion = DateTime.UtcNow.AddMinutes(2)
             };
 
-           
+
 
             await _context.HistorialRefreshTokens.AddAsync(historialRefreshToken);
             await _context.SaveChangesAsync();
 
 
             return new AutorizacionResponse { Token = token, RefreshToken = refreshToken, Resultado = true, Msg = "Ok" };
-            
+
         }
 
         public async Task<AutorizacionResponse> DevolverToken(AutorizacionRequest autorizacion)
@@ -107,7 +107,7 @@ namespace ProyectoPAU.Services
             var usuario_encontrado = _context.Usuarios.FirstOrDefault(x =>
             x.Nombre == autorizacion.NombreUsuario && x.Contraseña == autorizacion.Clave);
 
-            if(usuario_encontrado == null)
+            if (usuario_encontrado == null)
             {
                 return await Task.FromResult<AutorizacionResponse>(null);
 

@@ -1,6 +1,6 @@
 ﻿using ProyectoPAU.Models;
 
-namespace ProyectoPAU.Services
+namespace ProyectoPAU.Services.Registro
 {
     public interface IRegistroUsuario
     {
@@ -8,7 +8,7 @@ namespace ProyectoPAU.Services
 
         public bool IsRegistrado(string username, string email);
 
-          Task RegistrarUsuario(Usuario usuario);
+        Task RegistrarUsuario(Usuario usuario);
 
     }
 }

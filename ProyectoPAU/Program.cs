@@ -1,58 +1,64 @@
 using Microsoft.EntityFrameworkCore;
 using ProyectoPAU;
 using System.Configuration;
-using ProyectoPAU.Services;
 using Microsoft.Extensions.Configuration;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using ProyectoPAU.Models;
+using ProyectoPAU.Services.Auth;
+using ProyectoPAU.Services.Registro;
+using ProyectoPAU.Services.ProductoService.ProductoService;
+using ProyectoPAU.Services.ProductoService;
+using ProyectoPAU.Services.CategoriasService;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using ProyectoPAU.Services.LoginService;
 internal class Program
 {
     private static void Main(string[] args)
     {
+        
+
+        // ...
+
         var builder = WebApplication.CreateBuilder(args);
 
-
-      
-
-        // Add services to the container.
+        // Agregar servicios al contenedor.
         builder.Services.AddControllersWithViews();
         builder.Services.AddScoped<IRegistroUsuario, RegistroService>();
-  
+        builder.Services.AddScoped<ILoginService, LoginService>();
         builder.Services.AddScoped<IAutorizacionService, AutorizacionService>();
+        builder.Services.AddScoped<ICategoriasService, CategoriasService>();
+        builder.Services.AddScoped<IProductService, ProductService>();
+        builder.Services.AddHttpContextAccessor();
 
+        // Configurar la base de datos
         builder.Services.AddDbContext<TiendauContext>(options =>
-          options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaSQL")));
+            options.UseSqlServer(builder.Configuration.GetConnectionString("CadenaSQL")));
 
-        var key = builder.Configuration.GetValue<string>("JwtSettings:key");
-        var keyBytes = Encoding.ASCII.GetBytes(key);
+       
 
-      
-        builder.Services.AddAuthentication(config =>
-        {
-            config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
-        }).AddJwtBearer(config =>
-        {
-            config.RequireHttpsMetadata = false;
-            config.SaveToken = true;
-            config.TokenValidationParameters = new TokenValidationParameters
+        builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+            .AddCookie(options =>
             {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(keyBytes),
-                ValidateIssuer = false,
-                ValidateAudience = false,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-        });
+                options.Cookie.Name = "MyCookieAuthentication";
+                options.LoginPath = "/Usuario/Login";
+                options.LogoutPath = "/Usuario/CerrarSesion";
+                options.AccessDeniedPath = "/Home/Index";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            });
 
+        builder.Services.AddSession(options =>
+        {
+            options.Cookie.Name = "MySessionCookie"; // Nombre de la cookie de sesión
+            options.IdleTimeout = TimeSpan.FromMinutes(20); // Tiempo de espera de inactividad de la sesión
+            options.Cookie.HttpOnly = true; // Solo accesible a través de HTTP
+            options.Cookie.IsEssential = true; // Marca la cookie como esencial
+        });
 
         var app = builder.Build();
 
-       
+
 
 
 
@@ -71,10 +77,13 @@ internal class Program
 
         app.UseRouting();
 
+        // Agregar el middleware de sesión
+        app.UseSession();
 
         app.UseAuthentication();
 
         app.UseAuthorization();
+      
 
         app.MapControllerRoute(
             name: "default",

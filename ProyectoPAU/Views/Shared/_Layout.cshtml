@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Authorization
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -28,9 +30,14 @@
                                 <li>
                                   
                                 </li>
-                                <li>
-                                 
-                                </li>
+                                @if (User.Identity.IsAuthenticated)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("CerrarSesion","Usuario")">Cerrar Sesion </a>
+                                    </li>
+                                    
+                                }
+                               
                             </ul>
                         </div>
                     </div>
@@ -47,15 +54,38 @@
                         <div class="top-end">
                             <div class="user">
                                 <i class="lni lni-user"></i>
-                                Hello
+                                @User.Identity.Name
                             </div>
                             <ul class="user-login">
-                                <li>
-                                    <a href="@Url.Action("Index","Login")">Sign in</a>
-                                </li>
-                                <li>
-                                    <a href="@Url.Action("Index","Registro")">Register</a>
-                                </li>
+
+                                @if (!User.Identity.IsAuthenticated)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Index","Login")">Iniciar Sesion</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="@Url.Action("Index","Registro")">Registrarse</a>
+                                    </li>
+                                    
+                                }
+
+                                @{
+                                    var isAdmin = User.IsInRole("Administrador");
+                                }
+                                @if (User.Identity.IsAuthenticated && isAdmin)
+                                {
+                                    <li>
+                                        <a href="@Url.Action("Index","Producto")">Agregar Producto(ADMIN)</a>
+                                    </li>
+
+                                    <li>
+                                        <a href="@Url.Action("Index","AdminProducto")">(ADMIN)</a>
+                                    </li>
+                                }
+
+
+                                
                             </ul>
                         </div>
                     </div>
@@ -69,7 +99,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-3 col-md-3 col-7">
                         <!-- Start Header Logo -->
-                        <a class="navbar-brand" href="index.html">
+                        <a class="navbar-brand" href="@Url.Action("Index","Home")">
                             <img src="~/images/logo/logo.svg" alt="Logo">
                         </a>
                         <!-- End Header Logo -->
@@ -81,20 +111,16 @@
                             <div class="navbar-search search-style-5">
                                 <div class="search-select">
                                     <div class="select-position">
-                                        <select id="select1">
+                                        <select id="categorySelect" >
                                             <option selected>All</option>
-                                            <option value="1">option 01</option>
-                                            <option value="2">option 02</option>
-                                            <option value="3">option 03</option>
-                                            <option value="4">option 04</option>
-                                            <option value="5">option 05</option>
+                                            
                                         </select>
                                     </div>
                                 </div>
                                 <div class="search-input">
-                                    <input type="text" placeholder="Search">
+                                    <input type="text" id="searchInput" placeholder="Search">
                                 </div>
-                                <div class="search-btn">
+                                <div id="searchButton" class="search-btn">
                                     <button><i class="lni lni-search-alt"></i></button>
                                 </div>
                             </div>
@@ -198,9 +224,46 @@
             &copy; 2024 - ProyectoPAU - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
+      
+
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js" asp-append-version="true"></script>
+
+        <script src="https://unpkg.com/unfetch/dist/unfetch.umd.js" asp-append-version="true"></script>
+
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                document.getElementById("searchButton").addEventListener("click", function () {
+                    // Obtener el texto de búsqueda y la categoría seleccionada
+                    var searchText = document.getElementById("searchInput").value;
+                    var categoryId = document.getElementById("categorySelect").value;
+
+                    // Realizar la solicitud AJAX al servidor
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", "/Home/Search?searchText=" + encodeURIComponent(searchText) + "&categoryId=" + encodeURIComponent(categoryId), true);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === XMLHttpRequest.DONE) {
+                            if (xhr.status === 200) {
+                                // Actualizar la vista con los resultados de búsqueda
+                                document.querySelector(".container-fluid").innerHTML = xhr.responseText;
+                            } else {
+                                console.error("Error al realizar la búsqueda: " + xhr.statusText);
+                            }
+                        }
+                    };
+                    xhr.send();
+                });
+            });
+
+
+
+        </script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

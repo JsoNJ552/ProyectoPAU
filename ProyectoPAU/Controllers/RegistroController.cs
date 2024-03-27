@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoPAU.Models;
-using ProyectoPAU.Services;
+using ProyectoPAU.Services.Registro;
 
 namespace ProyectoPAU.Controllers
 {
@@ -19,6 +19,7 @@ namespace ProyectoPAU.Controllers
         }
         public IActionResult Index()
         {
+
             return View();
         }
 
@@ -31,7 +32,7 @@ namespace ProyectoPAU.Controllers
                 return View("Index");
             }
 
-
+            model.RolId = 2;
             _registro.RegistrarUsuario(model);
 
 
