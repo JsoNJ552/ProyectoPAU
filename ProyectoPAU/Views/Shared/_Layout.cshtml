@@ -105,27 +105,39 @@
                         <!-- End Header Logo -->
                     </div>
                     <div class="col-lg-5 col-md-7 d-xs-none">
-                        <!-- Start Main Menu Search -->
-                        <div class="main-menu-search">
-                            <!-- navbar search start -->
-                            <div class="navbar-search search-style-5">
-                                <div class="search-select">
-                                    <div class="select-position">
-                                        <select id="categorySelect" >
-                                            <option selected>All</option>
-                                            
-                                        </select>
-                                    </div>
+
+                        <form>
+
+                            <div class="main-menu-search">
+                                <!-- navbar search start -->
+                                <div class="navbar-search search-style-5">
+
+
+                                    <form id="searchForm" action="@Url.Action("BuscarProductos", "Home")" method="GET" class="d-flex">
+
+
+                                        <div class="search-select">
+                                        </div>
+
+
+                                        <div class="search-input">
+                                            <input type="text"  id="searchInput" name="searchInput" placeholder="Search">
+                                        </div>
+                                        <div id="searchButton" class="search-btn">
+                                            <button type="submit"><i class="lni lni-search-alt"></i></butto>
+                                        </div>
+
+                                    </form>
+
+
+
                                 </div>
-                                <div class="search-input">
-                                    <input type="text" id="searchInput" placeholder="Search">
-                                </div>
-                                <div id="searchButton" class="search-btn">
-                                    <button><i class="lni lni-search-alt"></i></button>
-                                </div>
+                                <!-- navbar search Ends -->
                             </div>
-                            <!-- navbar search Ends -->
-                        </div>
+
+                        </form>
+                        <!-- Start Main Menu Search -->
+                       
                         <!-- End Main Menu Search -->
                     </div>
                     <div class="col-lg-4 col-md-2 col-5">
@@ -235,33 +247,6 @@
         <script src="https://unpkg.com/unfetch/dist/unfetch.umd.js" asp-append-version="true"></script>
 
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                document.getElementById("searchButton").addEventListener("click", function () {
-                    // Obtener el texto de búsqueda y la categoría seleccionada
-                    var searchText = document.getElementById("searchInput").value;
-                    var categoryId = document.getElementById("categorySelect").value;
-
-                    // Realizar la solicitud AJAX al servidor
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("GET", "/Home/Search?searchText=" + encodeURIComponent(searchText) + "&categoryId=" + encodeURIComponent(categoryId), true);
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            if (xhr.status === 200) {
-                                // Actualizar la vista con los resultados de búsqueda
-                                document.querySelector(".container-fluid").innerHTML = xhr.responseText;
-                            } else {
-                                console.error("Error al realizar la búsqueda: " + xhr.statusText);
-                            }
-                        }
-                    };
-                    xhr.send();
-                });
-            });
-
-
-
-        </script>
 
 
     @await RenderSectionAsync("Scripts", required: false)

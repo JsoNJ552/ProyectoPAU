@@ -40,6 +40,26 @@ namespace ProyectoPAU.Controllers
         }
 
 
+
+
+        
+        public async Task<IActionResult> BuscarProductos(string searchInput)
+        {
+            // Aquí defines el filtro para buscar productos por palabras clave
+            Func<Producto, bool> filtro = producto => producto.Nombre.Contains(searchInput);
+
+            // Llama al método obtenerProductosFiltro con el filtro definido
+            var productosEncontrados = await _productService.obtenerProductosFiltro(filtro);
+
+            // Devuelve los productos encontrados a la vista
+        
+            return PartialView("_ProductListPartial", productosEncontrados);
+        }
+
+
+
+
+
         public IActionResult ProductoDetalle(int idProducto)
         {
             try
@@ -89,8 +109,6 @@ namespace ProyectoPAU.Controllers
                 return BadRequest("Error al registrar el producto: " + ex.Message);
             }
         }
-
-
 
 
 

@@ -70,6 +70,18 @@ namespace ProyectoPAU.Controllers
         }
 
 
+        public async Task<IActionResult> mostrarUsuarios()
+        {
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+
+            return RedirectToAction("Index", "Home");
+
+        }
+
+
+
+
         public async Task <IActionResult> CerrarSesion()
         {
 

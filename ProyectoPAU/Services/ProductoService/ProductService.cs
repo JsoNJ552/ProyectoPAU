@@ -55,9 +55,18 @@ namespace ProyectoPAU.Services.ProductoService
             }
         }
 
-        public Task<IEnumerable<Producto>> obtenerProductosFiltro(Func<Producto, bool> filtro = null)
+        public async Task<IEnumerable<Producto>> obtenerProductosFiltro(Func<Producto, bool> filtro = null)
         {
-            throw new NotImplementedException();
+            IQueryable<Producto> query = _context.Productos;
+
+            // Aplica el filtro si se proporciona
+            if (filtro != null)
+            {
+                query = query.Where(filtro).AsQueryable();
+            }
+
+            // Ejecuta la consulta y devuelve los resultados como una lista
+            return await query.ToListAsync();
         }
 
         public Producto obtenerProductosPorId(int idProducto)
