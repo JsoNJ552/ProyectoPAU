@@ -9,13 +9,7 @@ public partial class Carrito
 
     public int? UsuarioId { get; set; }
 
-    public int? ProductoId { get; set; }
-
-    public int? Cantidad { get; set; }
-
-    public decimal? Precio { get; set; }
-
-    public virtual Producto Producto { get; set; }
+    public virtual ICollection<CarritoDetalle> CarritoDetalles { get; set; } = new List<CarritoDetalle>();
 
     public virtual Usuario Usuario { get; set; }
 }

@@ -17,6 +17,8 @@ public partial class TiendauContext : DbContext
 
     public virtual DbSet<Carrito> Carritos { get; set; }
 
+    public virtual DbSet<CarritoDetalle> CarritoDetalles { get; set; }
+
     public virtual DbSet<CategoriaProducto> CategoriaProductos { get; set; }
 
     public virtual DbSet<DetalleVenta> DetalleVenta { get; set; }
@@ -38,29 +40,46 @@ public partial class TiendauContext : DbContext
     public virtual DbSet<Venta> Venta { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=JIM3N3Z; DataBase=TIENDAU; Trusted_Connection=True; TrustServerCertificate=True;");
+    {
+
+    }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Carrito>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Carrito__3214EC278F89A68D");
+            entity.HasKey(e => e.Id).HasName("PK__Carrito__3214EC271C5E4F1A");
 
             entity.ToTable("Carrito");
 
             entity.Property(e => e.Id).HasColumnName("ID");
-            entity.Property(e => e.Precio).HasColumnType("decimal(10, 2)");
-            entity.Property(e => e.ProductoId).HasColumnName("ProductoID");
             entity.Property(e => e.UsuarioId).HasColumnName("UsuarioID");
-
-            entity.HasOne(d => d.Producto).WithMany(p => p.Carritos)
-                .HasForeignKey(d => d.ProductoId)
-                .HasConstraintName("FK__Carrito__Product__236943A5");
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Carritos)
                 .HasForeignKey(d => d.UsuarioId)
-                .HasConstraintName("FK__Carrito__Usuario__22751F6C");
+                .HasConstraintName("FK__Carrito__Usuario__7FEAFD3E");
+        });
+
+        modelBuilder.Entity<CarritoDetalle>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__CarritoD__3214EC27288AC43A");
+
+            entity.ToTable("CarritoDetalle");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.IdCarrito).HasColumnName("ID_Carrito");
+            entity.Property(e => e.IdProducto).HasColumnName("ID_PRODUCTO");
+            entity.Property(e => e.PrecioTotal).HasColumnName("Precio_Total");
+            entity.Property(e => e.PrecioUnitario).HasColumnName("Precio_Unitario");
+
+            entity.HasOne(d => d.IdCarritoNavigation).WithMany(p => p.CarritoDetalles)
+                .HasForeignKey(d => d.IdCarrito)
+                .HasConstraintName("FK__CarritoDe__Preci__02C769E9");
+
+            entity.HasOne(d => d.IdProductoNavigation).WithMany(p => p.CarritoDetalles)
+                .HasForeignKey(d => d.IdProducto)
+                .HasConstraintName("FK__CarritoDe__ID_PR__03BB8E22");
         });
 
         modelBuilder.Entity<CategoriaProducto>(entity =>
@@ -77,7 +96,7 @@ public partial class TiendauContext : DbContext
 
         modelBuilder.Entity<DetalleVenta>(entity =>
         {
-            entity.HasKey(e => e.IdDetalleVenta).HasName("PK__DetalleV__0157010AF5AB29E3");
+            entity.HasKey(e => e.IdDetalleVenta).HasName("PK__DetalleV__0157010AB9809744");
 
             entity.Property(e => e.IdDetalleVenta).HasColumnName("ID_DetalleVenta");
             entity.Property(e => e.ProductoId).HasColumnName("Producto_ID");
@@ -85,11 +104,11 @@ public partial class TiendauContext : DbContext
 
             entity.HasOne(d => d.Producto).WithMany(p => p.DetalleVenta)
                 .HasForeignKey(d => d.ProductoId)
-                .HasConstraintName("FK__DetalleVe__Produ__1F98B2C1");
+                .HasConstraintName("FK__DetalleVe__Produ__7D0E9093");
 
             entity.HasOne(d => d.Venta).WithMany(p => p.DetalleVenta)
                 .HasForeignKey(d => d.VentaId)
-                .HasConstraintName("FK__DetalleVe__Venta__1EA48E88");
+                .HasConstraintName("FK__DetalleVe__Venta__7C1A6C5A");
         });
 
         modelBuilder.Entity<ErroresDePrograma>(entity =>
@@ -110,7 +129,7 @@ public partial class TiendauContext : DbContext
 
         modelBuilder.Entity<HistorialRefreshToken>(entity =>
         {
-            entity.HasKey(e => e.IdHistorialToken).HasName("PK__Historia__03DC48A53C05F444");
+            entity.HasKey(e => e.IdHistorialToken).HasName("PK__Historia__03DC48A508C03EFE");
 
             entity.ToTable("HistorialRefreshToken");
 
@@ -126,12 +145,12 @@ public partial class TiendauContext : DbContext
 
             entity.HasOne(d => d.IdUsuarioNavigation).WithMany(p => p.HistorialRefreshTokens)
                 .HasForeignKey(d => d.IdUsuario)
-                .HasConstraintName("FK__Historial__IdUsu__5FB337D6");
+                .HasConstraintName("FK__Historial__IdUsu__503BEA1C");
         });
 
         modelBuilder.Entity<ListaDeseo>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__ListaDes__3214EC27EBDCFCC6");
+            entity.HasKey(e => e.Id).HasName("PK__ListaDes__3214EC279E3B6038");
 
             entity.ToTable("ListaDeseo");
 
@@ -150,7 +169,7 @@ public partial class TiendauContext : DbContext
 
         modelBuilder.Entity<Producto>(entity =>
         {
-            entity.HasKey(e => e.IdProducto).HasName("PK__Producto__9B4120E297622B4B");
+            entity.HasKey(e => e.IdProducto).HasName("PK__Producto__9B4120E2E9835DF0");
 
             entity.ToTable("Producto");
 
@@ -174,7 +193,7 @@ public partial class TiendauContext : DbContext
 
             entity.HasOne(d => d.IdCategoriaNavigation).WithMany(p => p.Productos)
                 .HasForeignKey(d => d.IdCategoria)
-                .HasConstraintName("FK__Producto__ID_Cat__1AD3FDA4");
+                .HasConstraintName("FK__Producto__ID_Cat__756D6ECB");
         });
 
         modelBuilder.Entity<Rol>(entity =>
@@ -216,7 +235,7 @@ public partial class TiendauContext : DbContext
 
         modelBuilder.Entity<Usuario>(entity =>
         {
-            entity.HasKey(e => e.UsuarioId).HasName("PK__Usuario__2B3DE798BB8FD573");
+            entity.HasKey(e => e.UsuarioId).HasName("PK__Usuario__2B3DE798A6D52D92");
 
             entity.ToTable("Usuario");
 
@@ -229,12 +248,12 @@ public partial class TiendauContext : DbContext
 
             entity.HasOne(d => d.Rol).WithMany(p => p.Usuarios)
                 .HasForeignKey(d => d.RolId)
-                .HasConstraintName("FK__Usuario__RolID__534D60F1");
+                .HasConstraintName("FK__Usuario__RolID__3D2915A8");
         });
 
         modelBuilder.Entity<Venta>(entity =>
         {
-            entity.HasKey(e => e.IdVenta).HasName("PK__Venta__3CD842E5A5527BDC");
+            entity.HasKey(e => e.IdVenta).HasName("PK__Venta__3CD842E5E812E5DE");
 
             entity.Property(e => e.IdVenta).HasColumnName("ID_Venta");
             entity.Property(e => e.Fecha).HasColumnName("fecha");
@@ -243,11 +262,11 @@ public partial class TiendauContext : DbContext
 
             entity.HasOne(d => d.Tienda).WithMany(p => p.Venta)
                 .HasForeignKey(d => d.TiendaId)
-                .HasConstraintName("FK__Venta__tienda_id__08B54D69");
+                .HasConstraintName("FK__Venta__tienda_id__7849DB76");
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Venta)
                 .HasForeignKey(d => d.UsuarioId)
-                .HasConstraintName("FK__Venta__usuario_I__09A971A2");
+                .HasConstraintName("FK__Venta__usuario_I__793DFFAF");
         });
 
         OnModelCreatingPartial(modelBuilder);

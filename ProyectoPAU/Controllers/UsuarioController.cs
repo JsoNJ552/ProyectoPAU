@@ -19,12 +19,14 @@ namespace ProyectoPAU.Controllers
         private readonly IAutorizacionService _autorizacionService;
         private readonly ILoginService _loginService;
         private readonly TiendauContext _tiendauContext;
+        private readonly Carrito _carrito;
 
-        public UsuarioController(IAutorizacionService autorizacionService, ILoginService loginService, TiendauContext tiendauContext)
+        public UsuarioController(IAutorizacionService autorizacionService, Carrito carrito, ILoginService loginService, TiendauContext tiendauContext)
         {
             _autorizacionService = autorizacionService;
             _loginService = loginService;
             _tiendauContext = tiendauContext;
+            _carrito = carrito;
         }
 
         [HttpPost]
@@ -34,13 +36,16 @@ namespace ProyectoPAU.Controllers
             {
                 var usuarioValido = await _loginService.ValidateUserAsync(usuario);
 
-                if (usuarioValido!=null)
+                if (usuarioValido != null)
                 {
                     var claims = new List<Claim>
                     {
                     new Claim(ClaimTypes.Name, usuarioValido.Nombre),
-                    new Claim("Correo", usuario.email)
-                    
+                    new Claim("Correo", usuario.email),
+                    new Claim("UserId", usuarioValido.UsuarioId.ToString())
+
+
+
 
 
                     };
@@ -51,16 +56,23 @@ namespace ProyectoPAU.Controllers
                         claims.Add(new Claim(ClaimTypes.Role, rolnombre));
                     }
 
+                    HttpContext.Session.SetInt32("idUsuario", usuarioValido.UsuarioId);
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                    
+
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
-                  
-                };
+                    return Ok("Credenciales correctas");
+
+                }
+                else
+                {
+                    return BadRequest("Credenciales Incorrectas");
+                }
+                
               
 
                 // Credenciales correctas
-                return Ok("Credenciales correctas");
+                
             }
             catch (Exception ex)
             {

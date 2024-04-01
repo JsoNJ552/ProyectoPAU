@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoPAU.Models;
 using ProyectoPAU.Services.Registro;
 
@@ -8,11 +9,13 @@ namespace ProyectoPAU.Controllers
     {
         private readonly TiendauContext _context;
         private readonly IRegistroUsuario _registro;
- 
-        public RegistroController (TiendauContext context, IRegistroUsuario registro)
+        private readonly IHttpContextAccessor _httpContextAccesso;
+
+        public RegistroController (TiendauContext context, IRegistroUsuario registro, IHttpContextAccessor httpContextAccesso)
         {
-        _context = context;
-        _registro = registro;
+            _context = context;
+            _registro = registro;
+            _httpContextAccesso = httpContextAccesso;
          
             
 
@@ -27,16 +30,36 @@ namespace ProyectoPAU.Controllers
         public  async Task <IActionResult> Registrar(Usuario model)
         {
 
-            if (_registro.IsRegistrado(model.Nombre, model.Email))
-            {
-                return View("Index");
-            }
 
-            model.RolId = 2;
-            _registro.RegistrarUsuario(model);
+            try
+            {
+                
+
+
+                if (_registro.IsRegistrado(model.Nombre, model.Email))
+                {
+                    return View("Index");
+                }
+
+                model.RolId = 2;
+                model.Activo = true;
+                await _registro.RegistrarUsuario(model);
+
+
+                return RedirectToAction("Index", "Login");
+
+            }
+            catch (Exception ex)
+            {
+
+
+            }
 
 
             return RedirectToAction("Index", "Login");
+
+
+
 
         }
     }

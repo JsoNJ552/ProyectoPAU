@@ -2,9 +2,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ProyectoPAU.Models;
 using ProyectoPAU.Models.Custom;
+using ProyectoPAU.Services.CarService;
 using ProyectoPAU.Services.CategoriasService;
 using ProyectoPAU.Services.ProductoService.ProductoService;
+using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.Threading.Tasks;
 
 namespace ProyectoPAU.Controllers
@@ -16,28 +19,70 @@ namespace ProyectoPAU.Controllers
         private readonly ICategoriasService _categoriasService;
         private readonly TiendauContext _tiendauContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ICarService _carService;
+        private readonly Carrito carrito;
 
         public HomeController(ILogger<HomeController> logger,
-            ICategoriasService categoriasService, IProductService productoService, IHttpContextAccessor httpContextAccessor, TiendauContext tiendauContext)
+            ICategoriasService categoriasService, IProductService productoService, 
+            IHttpContextAccessor httpContextAccessor, TiendauContext tiendauContext,
+            ICarService carService, Carrito carrito)
         {
             _logger = logger;
             _productoService = productoService;
             _httpContextAccessor = httpContextAccessor;
             _categoriasService = categoriasService;
             _tiendauContext = tiendauContext;
+            _carService = carService;
+            this.carrito = carrito;
         }
 
         public async Task<IActionResult> Index()
         {
             try
-            {
-                var userId = HttpContext.Session.GetInt32("UserId");
-                var username = HttpContext.Session.GetString("Nombre");
+            {   //Crea el carrito automaticamente a un usuario recien registrado
+
+                if(User.Identity.IsAuthenticated)
+                {
+                    var httpContext = _httpContextAccessor.HttpContext;
+                    int? usuarioIDNullable = httpContext.Session.GetInt32("idUsuario");
+                    var carritoNullable = await _carService.BuscarAsyncCarrito((int)usuarioIDNullable);
+
+                    if (usuarioIDNullable != null && carritoNullable == null)
+                    {
+                        var nuevoCarrito = new Carrito
+                        {
+                            UsuarioId = usuarioIDNullable.Value,
+
+                        };
+                        await _carService.CrearCarrito(nuevoCarrito);
+
+
+                    }
+
+
+
+                }
+
+              
+                
+
+                var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
+                ViewData["Carrito"] = carritoDetalle;
+                
+
+                
+
+
+
 
                 List<CategoriaProducto> listaCategorias = await _categoriasService.obtenerProductosAsync();
 
+
+
                 // Pasar la lista de categorías a la vista
                 ViewData["Categorias"] = listaCategorias;
+                //ViewData["Carrito"] = CarritoDetalles;
+
 
                 // Obtener todos los productos de la base de datos
                 var listaProductos = await _productoService.obtenerProductosAsync();

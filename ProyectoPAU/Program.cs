@@ -13,6 +13,7 @@ using ProyectoPAU.Services.ProductoService;
 using ProyectoPAU.Services.CategoriasService;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ProyectoPAU.Services.LoginService;
+using ProyectoPAU.Services.CarService;
 internal class Program
 {
     private static void Main(string[] args)
@@ -30,7 +31,13 @@ internal class Program
         builder.Services.AddScoped<IAutorizacionService, AutorizacionService>();
         builder.Services.AddScoped<ICategoriasService, CategoriasService>();
         builder.Services.AddScoped<IProductService, ProductService>();
+        builder.Services.AddScoped<ICarService, CarService>();
+        builder.Services.AddScoped< CarritoDetalle>();
+        builder.Services.AddScoped<Carrito>();
+        builder.Services.AddScoped<CarritoActionFilter>();
+
         builder.Services.AddHttpContextAccessor();
+
 
         // Configurar la base de datos
         builder.Services.AddDbContext<TiendauContext>(options =>
@@ -56,10 +63,17 @@ internal class Program
             options.Cookie.IsEssential = true; // Marca la cookie como esencial
         });
 
+
+        builder.Services.AddControllersWithViews(options =>
+        {
+            options.Filters.Add(typeof(CarritoActionFilter));
+        });
+
+
+
+
+
         var app = builder.Build();
-
-
-
 
 
         // Configure the HTTP request pipeline.
@@ -69,6 +83,7 @@ internal class Program
             // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
             app.UseHsts();
         }
+
 
 
 

@@ -13,7 +13,7 @@ namespace ProyectoPAU.Services.ProductoService.ProductoService
         public Task<List<Producto>> obtenerProductosAsync();
         public Producto obtenerProductosPorId(int idProducto);
 
-        public Task<IEnumerable<Producto>> obtenerProductosFiltro(Func<Producto, bool> filtro = null);
+        public Task<List<Producto>> obtenerProductosPorNombreAsync(string nombre);
 
         public Task EditarrProducto(Producto producto);
 

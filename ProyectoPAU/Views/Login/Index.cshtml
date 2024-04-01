@@ -90,7 +90,7 @@
                         if (response === "Credenciales correctas") {
                             // Redirigir al usuario a otra página
                             window.location.href = "@Url.Action("Index","Home")";
-                        } else {
+                        } else if (response === "Credenciales Incorrectas") {
                             // Mostrar mensaje de error con Swal.fire
                             Swal.fire({
                                 icon: 'error',
@@ -104,7 +104,7 @@
                         Swal.fire({
                             icon: 'error',
                             title: 'Error',
-                            text: 'Error al procesar la solicitud: ' + xhr.responseText
+                            text: 'Error al procesar la solicitud: ' + xhr.responseText + error + status
                         });
                     }
                 });

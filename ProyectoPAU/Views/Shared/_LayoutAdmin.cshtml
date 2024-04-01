@@ -82,33 +82,6 @@
         <script src="https://unpkg.com/unfetch/dist/unfetch.umd.js" asp-append-version="true"></script>
 
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                document.getElementById("searchButton").addEventListener("click", function () {
-                    // Obtener el texto de búsqueda y la categoría seleccionada
-                    var searchText = document.getElementById("searchInput").value;
-                    var categoryId = document.getElementById("categorySelect").value;
-
-                    // Realizar la solicitud AJAX al servidor
-                    var xhr = new XMLHttpRequest();
-                    xhr.open("GET", "/Home/Search?searchText=" + encodeURIComponent(searchText) + "&categoryId=" + encodeURIComponent(categoryId), true);
-                    xhr.onreadystatechange = function () {
-                        if (xhr.readyState === XMLHttpRequest.DONE) {
-                            if (xhr.status === 200) {
-                                // Actualizar la vista con los resultados de búsqueda
-                                document.querySelector(".container-fluid").innerHTML = xhr.responseText;
-                            } else {
-                                console.error("Error al realizar la búsqueda: " + xhr.statusText);
-                            }
-                        }
-                    };
-                    xhr.send();
-                });
-            });
-
-
-
-        </script>
 
 
         @await RenderSectionAsync("Scripts", required: false)

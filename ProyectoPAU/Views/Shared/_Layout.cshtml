@@ -75,9 +75,7 @@
                                 }
                                 @if (User.Identity.IsAuthenticated && isAdmin)
                                 {
-                                    <li>
-                                        <a href="@Url.Action("Index","Producto")">Agregar Producto(ADMIN)</a>
-                                    </li>
+                                    
 
                                     <li>
                                         <a href="@Url.Action("Index","AdminProducto")">(ADMIN)</a>
@@ -106,14 +104,14 @@
                     </div>
                     <div class="col-lg-5 col-md-7 d-xs-none">
 
-                        <form>
+                        
 
                             <div class="main-menu-search">
                                 <!-- navbar search start -->
                                 <div class="navbar-search search-style-5">
 
 
-                                    <form id="searchForm" action="@Url.Action("BuscarProductos", "Home")" method="GET" class="d-flex">
+                                    <form id="searchForm" action="@Url.Action("BuscarProductos", "Producto")" method="GET" class="d-flex">
 
 
                                         <div class="search-select">
@@ -135,7 +133,7 @@
                                 <!-- navbar search Ends -->
                             </div>
 
-                        </form>
+                      
                         <!-- Start Main Menu Search -->
                        
                         <!-- End Main Menu Search -->
@@ -149,6 +147,8 @@
                                     <span>(+100) 123 456 7890</span>
                                 </h3>
                             </div>
+
+                         
                             <div class="navbar-cart">
                                 <div class="wishlist">
                                     <a href="javascript:void(0)">
@@ -156,6 +156,9 @@
                                         <span class="total-items">0</span>
                                     </a>
                                 </div>
+                                
+
+
                                 <div class="cart-items">
                                     <a href="javascript:void(0)" class="main-btn">
                                         <i class="lni lni-cart"></i>
@@ -168,44 +171,60 @@
                                             <a href="cart.html">View Cart</a>
                                         </div>
                                         <ul class="shopping-list">
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item">
-                                                    <i class="lni lni-close"></i>
-                                                </a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html">
-                                                        <img src="~/images/header/cart-items/item1.jpg" alt="#">
-                                                    </a>
-                                                </div>
 
-                                                <div class="content">
-                                                    <h4>
-                                                        <a href="product-details.html">
-                                                            Apple Watch Series 6
-                                                        </a>
-                                                    </h4>
-                                                    <p class="quantity">1x - <span class="amount">$99.00</span></p>
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <a href="javascript:void(0)" class="remove" title="Remove this item">
-                                                    <i class="lni lni-close"></i>
-                                                </a>
-                                                <div class="cart-img-head">
-                                                    <a class="cart-img" href="product-details.html">
-                                                        <img src="~!/images/header/cart-items/item2.jpg" alt="#">
-                                                    </a>
-                                                </div>
-                                                <div class="content">
-                                                    <h4><a href="product-details.html">Wi-Fi Smart Camera</a></h4>
-                                                    <p class="quantity">1x - <span class="amount">$35.00</span></p>
-                                                </div>
-                                            </li>
+                                            @if(ViewData["Carrito"] != null)
+                                            {
+                                                foreach (var productos in ViewData["Carrito"] as List<CarritoDetalle>)
+                                                {
+
+
+                                                    <li>
+
+
+
+
+                                                        <form id="deleteCarForm" asp-action="Eliminar" asp-controller="Carrito" method="post">
+                                                            <input type="hidden" value="@productos.Id" name="IdProducto" id="IdProducto">
+                                                            <a href="javascript:void(0)" class="remove" title="Remove this item">
+                                                                <button type="submit" class="lni lni-close"></button>
+                                                            </a>
+                                                        </form>
+
+                                                        
+                                                        <div class="cart-img-head">
+                                                            <a class="cart-img" href="product-details.html">
+                                                                <img src="data:image/png;base64,@productos.IdProductoNavigation.Foto" alt="#">
+                                                            </a>
+                                                        </div>
+
+                                                        <div class="content">
+                                                            <h4>
+                                                                <a href="product-details.html">
+                                                                    @productos.IdProductoNavigation.Nombre
+                                                                </a>
+                                                            </h4>
+                                                            <p class="quantity">@productos.Cantidad x - <span class="amount">$ @productos.PrecioUnitario</span></p>
+                                                        </div>
+
+
+
+
+                                                    </li>
+                                                    
+                                                    
+
+                                                }
+
+
+                                                
+                                            }
+                                           
+                                   
                                         </ul>
                                         <div class="bottom">
                                             <div class="total">
                                                 <span>Total</span>
-                                                <span class="total-amount">$134.00</span>
+                                                <span class="total-amount">$</span>
                                             </div>
                                             <div class="button">
                                                 <a href="checkout.html" class="btn animate">Checkout</a>
@@ -243,6 +262,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.10.7/dist/sweetalert2.all.min.js" asp-append-version="true"></script>
+        <script type="module" src="https://cdnjs.cloudflare.com/ajax/libs/fetch/3.6.20/fetch.min.js" integrity="sha512-5vzl35V/cPSXliPbZtxHY0Q6cfYFd2Qld79+d7wLPbOxnKeCHH/LmlMD8aYl0ZN5VZPFM2FnKiAjoNJ2k3vrEg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
         <script src="https://unpkg.com/unfetch/dist/unfetch.umd.js" asp-append-version="true"></script>
 

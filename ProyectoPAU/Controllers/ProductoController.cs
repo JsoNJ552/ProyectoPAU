@@ -49,10 +49,12 @@ namespace ProyectoPAU.Controllers
             Func<Producto, bool> filtro = producto => producto.Nombre.Contains(searchInput);
 
             // Llama al método obtenerProductosFiltro con el filtro definido
-            var productosEncontrados = await _productService.obtenerProductosFiltro(filtro);
+            var productosEncontrados = await _productService.obtenerProductosPorNombreAsync(searchInput);
+            var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
+            ViewData["Carrito"] = carritoDetalle;
 
             // Devuelve los productos encontrados a la vista
-        
+
             return PartialView("_ProductListPartial", productosEncontrados);
         }
 
@@ -75,7 +77,12 @@ namespace ProyectoPAU.Controllers
                     // Guardar la imagen en el sistema de archivos
                     string imagePath = $"wwwroot/images/Productos/{producto.IdProducto}.png";
                     System.IO.File.WriteAllBytes(imagePath, bytes);
+                    var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
+                    ViewData["Carrito"] = carritoDetalle;
+
                 }
+
+
 
 
                 return View(producto);
@@ -90,7 +97,7 @@ namespace ProyectoPAU.Controllers
         }
         [Authorize(Roles = "Administrador")]
         [HttpPost]
-        public async Task<IActionResult> RegistrarProducto([FromForm] Producto model, IFormFile photoFile)
+        public async Task<IActionResult>RegistrarProducto([FromForm] Producto producto, IFormFile photoFile)
         {
             try
             {
@@ -99,8 +106,10 @@ namespace ProyectoPAU.Controllers
                     return BadRequest("No se proporcionó ningún archivo.");
                 }
 
+               
+                
                 // Procesar el archivo de imagen si es necesario
-                await _productService.RegistrarProducto(model, photoFile);
+               // await _productService.RegistrarProducto(model, photoFile);
 
                 return Ok("Producto registrado correctamente.");
             }

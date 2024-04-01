@@ -3,10 +3,6 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-@section Estilos {
-    <link rel="stylesheet" href="~/css/ProductoDetalle.css" />
-}
-
 <div class="container">
     <div class=" text-center mt-5 ">
         <h1>Agregar Productos</h1>
@@ -56,30 +52,22 @@
                                     <input type="text" class="form-control" id="marca" name="marca" placeholder="Ingrese la marca del producto">
                                 </div>
                                 <div class="form-group">
+                                    <label for="number">Cantidad:</label>
+                                    <input type="number" class="form-control" id="cantidad" name="cantidad" placeholder="Ingrese la cantidad de productos">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="checkbox">Activo:</label>
+                                    <input type="checkbox" id="activo" name="activo">
+                                </div>
+
+                                <div class="form-group">
                                     <label for="foto">Foto:</label>
                                     <input type="file" class="form-control" id="photoFile" name="photoFile" placeholder="Seleccione la foto del producto">
                                 </div>
 
-                                <div class="row mt-2">
-                                    <div class="col">
 
-                                        <button type="submit" class="btn btn-dark btn-send pt-2 btn-block">Guardar </button>
-                                        
-
-                                    </div>
-                                   
-
-                                    <div class="col">
-
-                                        <a href="@Url.Action("Index")" class="btn btn-light btn-send pt-2 btn-block">Volver</a>
-
-
-                                    </div>
-
-                                </div>
-
-
-                                
+                                <button type="submit" class="btn btn-dark btn-send pt-2 btn-block">Guardar Producto</button>
                             </div>
                         </form>
                     </div>
@@ -88,61 +76,37 @@
         </div>
     </div>
 </div>
-
 @section Scripts {
-
-
     <script>
-
-        function mostrarFoto(input) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                $('#previewFoto').attr('src', e.target.result);
-            }
-            reader.readAsDataURL(input.files[0]);
-        }
-
-
         $(document).ready(function () {
             $('#formularioProducto').submit(function (event) {
                 event.preventDefault();
-
-                var formData = new FormData();
-                formData.append('nombre', $('#nombre').val());
-                formData.append('precio', $('#precio').val());
-                formData.append('tipo', $('#tipo').val());
-                formData.append('IdCategoria', $('#categoria').val());
-                formData.append('descripcion', $('#descripcion').val());
-                formData.append('detalles', $('#detalles').val());
-                formData.append('marca', $('#marca').val());
-                formData.append('photoFile', $('#photoFile')[0].files[0]);
-
+                var formData = new FormData(this);
                 $.ajax({
-                    url: '@Url.Action("RegistrarProducto", "Producto")',
+                    url: '@Url.Action("RegistrarProducto", "AdminProducto")',
                     type: 'POST',
                     processData: false,
                     contentType: false,
                     data: formData,
                     success: function (response) {
-                        // Mostrar SweetAlert de éxito
-                        Swal.fire({
-                            icon: 'success',
-                            title: '¡Éxito!',
-                            text: 'Producto registrado correctamente.'
-                        });
-                        $('#formularioProducto')[0].reset();
+                        if (response === "Producto registrado correctamente.") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: 'Producto registrado correctamente.'
+                            });
+                            $('#formularioProducto')[0].reset();
+                        }
                     },
                     error: function (xhr, status, error) {
-                        // Mostrar SweetAlert de error
                         Swal.fire({
                             icon: 'error',
                             title: '¡Error!',
-                            text: 'Hubo un problema al registrar el producto.'
+                            text: 'Hubo un problema al registrar el producto.' + xhr.responseText + error + status
                         });
                     }
                 });
             });
         });
     </script>
-
 }

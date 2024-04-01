@@ -23,9 +23,11 @@ public partial class Producto
 
     public string Marca { get; set; }
 
+    public int? Cantidad { get; set; }
+
     public bool? Activo { get; set; }
 
-    public virtual ICollection<Carrito> Carritos { get; set; } = new List<Carrito>();
+    public virtual ICollection<CarritoDetalle> CarritoDetalles { get; set; } = new List<CarritoDetalle>();
 
     public virtual ICollection<DetalleVenta> DetalleVenta { get; set; } = new List<DetalleVenta>();
 

@@ -55,18 +55,23 @@ namespace ProyectoPAU.Services.ProductoService
             }
         }
 
-        public async Task<IEnumerable<Producto>> obtenerProductosFiltro(Func<Producto, bool> filtro = null)
+        public async Task<List<Producto>> obtenerProductosPorNombreAsync(string nombre)
         {
-            IQueryable<Producto> query = _context.Productos;
-
-            // Aplica el filtro si se proporciona
-            if (filtro != null)
+            try
             {
-                query = query.Where(filtro).AsQueryable();
-            }
+                // Consulta todos los productos cuyo nombre, marca o pertenezcan a una categoría contenga la cadena especificada
+                var productos = await _context.Productos
+                    .Where(p => p.Nombre.Contains(nombre) && p.Activo == true || p.Marca.Contains(nombre)  && p.Activo == true ||
+                                p.IdCategoriaNavigation.Nombre.Contains(nombre) && p.Activo == true)
+                    .ToListAsync();
 
-            // Ejecuta la consulta y devuelve los resultados como una lista
-            return await query.ToListAsync();
+                return productos;
+            }
+            catch (Exception ex)
+            {
+                // Manejo de excepciones si es necesario
+                throw new Exception("Ocurrió un error al obtener los productos.", ex);
+            }
         }
 
         public Producto obtenerProductosPorId(int idProducto)
@@ -75,7 +80,7 @@ namespace ProyectoPAU.Services.ProductoService
             {
                 var producto = _context.Productos
                     
-                    .FirstOrDefault(p => p.IdProducto == idProducto);
+                    .FirstOrDefault(p => p.IdProducto == idProducto );
 
                 return producto;
             }
@@ -104,20 +109,20 @@ namespace ProyectoPAU.Services.ProductoService
                 string photoBase64 = Convert.ToBase64String(photoBytes);
 
                 producto.Foto = photoBase64;
-                using (var context = new TiendauContext())
-                {
-                    context.Add(producto);
-                    await context.SaveChangesAsync();
+                
+                    _context.Add(producto);
+                    await _context.SaveChangesAsync();
 
-                }
-            }
-            catch(Exception ex)
-            {
                 
             }
-            
+            catch (Exception ex)
+            {
+
+            }
+
         }
 
-        
+
+
     }
 }

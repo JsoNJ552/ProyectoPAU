@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoPAU.Models;
 using ProyectoPAU.Services.CategoriasService;
 using ProyectoPAU.Services.ProductoService;
@@ -6,6 +7,7 @@ using ProyectoPAU.Services.ProductoService.ProductoService;
 
 namespace ProyectoPAU.Controllers
 {
+    [Authorize(Roles ="Administrador")]
     public class AdminProductoController : Controller
     {
 
@@ -74,6 +76,28 @@ namespace ProyectoPAU.Controllers
             return View();
 
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RegistrarProducto([FromForm] Producto producto, IFormFile photoFile)
+        {
+            try
+            {
+                if (photoFile == null || photoFile.Length == 0)
+                {
+                    return BadRequest("No se proporcionó ningún archivo.");
+                }
+
+                producto.Activo = true;
+               
+                await _productoService.RegistrarProducto(producto, photoFile);
+                return Ok("Producto registrado correctamente.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error al registrar el producto: " + ex.Message);
+            }
+        }
+
 
         public IActionResult Editar(int IdProducto)
         {
