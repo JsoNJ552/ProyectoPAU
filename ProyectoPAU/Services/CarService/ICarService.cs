@@ -1,4 +1,5 @@
-﻿using ProyectoPAU.Models;
+﻿using Microsoft.AspNetCore.Mvc;
+using ProyectoPAU.Models;
 
 namespace ProyectoPAU.Services.CarService
 {
@@ -14,6 +15,8 @@ namespace ProyectoPAU.Services.CarService
         public Task<List<CarritoDetalle>> detallesCarrito(Carrito carrito);
 
         public Task EliminarCarritoDetalle(int idCarritoDetalle);
+
+        public  Task EliminarCarritosDetalles(int idCarrito);
 
 
     }

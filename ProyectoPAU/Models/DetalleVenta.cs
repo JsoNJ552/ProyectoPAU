@@ -17,6 +17,16 @@ public partial class DetalleVenta
 
     public int? PrecioTotal { get; set; }
 
+    public string NombreJuridico { get; set; }
+
+    public string ApellidoJuridico { get; set; }
+
+    public string Direccion { get; set; }
+
+    public string ZipCode { get; set; }
+
+    public string TipoPago { get; set; }
+
     public virtual Producto Producto { get; set; }
 
     public virtual Venta Venta { get; set; }

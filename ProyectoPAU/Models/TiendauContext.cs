@@ -96,19 +96,34 @@ public partial class TiendauContext : DbContext
 
         modelBuilder.Entity<DetalleVenta>(entity =>
         {
-            entity.HasKey(e => e.IdDetalleVenta).HasName("PK__DetalleV__0157010AB9809744");
+            entity.HasKey(e => e.IdDetalleVenta).HasName("PK__DetalleV__0157010ABFA1B780");
 
             entity.Property(e => e.IdDetalleVenta).HasColumnName("ID_DetalleVenta");
+            entity.Property(e => e.ApellidoJuridico)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.Direccion)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.NombreJuridico)
+                .HasMaxLength(100)
+                .IsUnicode(false);
             entity.Property(e => e.ProductoId).HasColumnName("Producto_ID");
+            entity.Property(e => e.TipoPago)
+                .HasMaxLength(30)
+                .IsUnicode(false);
             entity.Property(e => e.VentaId).HasColumnName("Venta_ID");
+            entity.Property(e => e.ZipCode)
+                .HasMaxLength(100)
+                .IsUnicode(false);
 
             entity.HasOne(d => d.Producto).WithMany(p => p.DetalleVenta)
                 .HasForeignKey(d => d.ProductoId)
-                .HasConstraintName("FK__DetalleVe__Produ__7D0E9093");
+                .HasConstraintName("FK__DetalleVe__Produ__1A9EF37A");
 
             entity.HasOne(d => d.Venta).WithMany(p => p.DetalleVenta)
                 .HasForeignKey(d => d.VentaId)
-                .HasConstraintName("FK__DetalleVe__Venta__7C1A6C5A");
+                .HasConstraintName("FK__DetalleVe__Venta__19AACF41");
         });
 
         modelBuilder.Entity<ErroresDePrograma>(entity =>
@@ -253,7 +268,7 @@ public partial class TiendauContext : DbContext
 
         modelBuilder.Entity<Venta>(entity =>
         {
-            entity.HasKey(e => e.IdVenta).HasName("PK__Venta__3CD842E5E812E5DE");
+            entity.HasKey(e => e.IdVenta).HasName("PK__Venta__3CD842E5F7329206");
 
             entity.Property(e => e.IdVenta).HasColumnName("ID_Venta");
             entity.Property(e => e.Fecha).HasColumnName("fecha");
@@ -262,11 +277,11 @@ public partial class TiendauContext : DbContext
 
             entity.HasOne(d => d.Tienda).WithMany(p => p.Venta)
                 .HasForeignKey(d => d.TiendaId)
-                .HasConstraintName("FK__Venta__tienda_id__7849DB76");
+                .HasConstraintName("FK__Venta__tienda_id__15DA3E5D");
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Venta)
                 .HasForeignKey(d => d.UsuarioId)
-                .HasConstraintName("FK__Venta__usuario_I__793DFFAF");
+                .HasConstraintName("FK__Venta__usuario_I__16CE6296");
         });
 
         OnModelCreatingPartial(modelBuilder);

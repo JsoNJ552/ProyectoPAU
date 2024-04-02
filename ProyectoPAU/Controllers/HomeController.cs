@@ -55,25 +55,13 @@ namespace ProyectoPAU.Controllers
 
                         };
                         await _carService.CrearCarrito(nuevoCarrito);
-
-
                     }
-
-
-
                 }
 
-              
-                
+
 
                 var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
                 ViewData["Carrito"] = carritoDetalle;
-                
-
-                
-
-
-
 
                 List<CategoriaProducto> listaCategorias = await _categoriasService.obtenerProductosAsync();
 

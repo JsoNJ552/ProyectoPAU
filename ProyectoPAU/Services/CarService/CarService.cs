@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using ProyectoPAU.Models;
 
 namespace ProyectoPAU.Services.CarService
@@ -137,6 +138,39 @@ namespace ProyectoPAU.Services.CarService
                 throw new Exception("Error al eliminar el carrito detalle: " + ex.Message );
             }
         }
+
+
+        public async Task  EliminarCarritosDetalles(int idCarrito)
+        {
+            try
+            {
+                // Buscar todos los detalles de carrito relacionados con el ID de carrito dado
+                var detallesCarrito = await _contex.CarritoDetalles.Where(cd => cd.IdCarrito == idCarrito).ToListAsync();
+
+                if (detallesCarrito != null && detallesCarrito.Any())
+                {
+                    // Eliminar cada detalle de carrito encontrado
+                    foreach (var detalle in detallesCarrito)
+                    {
+                        _contex.CarritoDetalles.Remove(detalle);
+                    }
+
+                    // Guardar los cambios en la base de datos
+                    await _contex.SaveChangesAsync();
+
+                    // Redirigir a la página del carrito o a donde sea necesario
+                }
+                else
+                {
+                    throw new Exception($"No se encontraron detalles de carrito para el carrito con ID {idCarrito}");
+                }
+            }
+            catch (Exception ex)
+            {
+        
+            }
+        }
+
 
 
     }

@@ -1,0 +1,259 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Estilos {
+    <link rel="stylesheet" href="~/css/CheckOut.css" />
+}
+
+<section class="h-100 h-custom">
+    <div class="container h-100 py-5">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col">
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="h5">Shopping Bag</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Marca</th>
+                                <th scope="col">Cantidad</th>
+                                <th scope="col">Precio</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (ViewData["Carrito"] != null)
+                            {
+                                @foreach (var carritoDetalles in ViewData["Carrito"] as List<CarritoDetalle>)
+                                {
+                                    <tr>
+                                        <th scope="row">
+                                            <div class="d-flex align-items-center">
+                                                <img id="imagen" name="imagen" src="data:image/png;base64,@carritoDetalles.IdProductoNavigation.Foto" class="img-fluid rounded-3" style="width: 120px;" alt="Book">
+                                                <div class="flex-column ms-4">
+                                                    <p name="name" id="name" class="mb-2">
+                                                        @carritoDetalles.IdProductoNavigation.Nombre
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <td class="align-middle">
+                                            <p id="marca" name="marca" class="mb-0" style="font-weight: 500;">@carritoDetalles.IdProductoNavigation.Marca</p>
+                                        </td>
+                                        <td class="align-middle">
+                                            <div class="d-flex flex-row">
+                                                <button class="btn btn-link px-2" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                                <input id="cantidad" min="0" name="cantidad" value="@carritoDetalles.Cantidad" type="number" class="form-control form-control-sm" style="width: 50px;" />
+                                            </div>
+                                        </td>
+                                        <td class="align-middle">
+                                            <p id="precio" name="precio" class="mb-0" style="font-weight: 500;">@carritoDetalles.PrecioUnitario</p>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card shadow-2-strong mb-5 mb-lg-0" style="border-radius: 16px;">
+                    <div class="card-body p-4">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-4 col-xl-3 mb-4 mb-md-0">
+                                <form>
+                                    <div class="d-flex flex-row pb-3">
+                                        <div class="d-flex align-items-center pe-2">
+                                            <input class="form-check-input" type="radio" name="paymentMethod" id="radioNoLabel1v" value="creditCard" aria-label="..." checked />
+                                        </div>
+                                        <div class="rounded border w-100 p-3">
+                                            <p class="d-flex align-items-center mb-0">
+                                                <i class="fab fa-cc-mastercard fa-2x text-dark pe-2"></i>Credit Card
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-row">
+                                        <div class="d-flex align-items-center pe-2">
+                                            <input class="form-check-input" type="radio" name="paymentMethod" id="radioNoLabel3v" value="paypal" aria-label="..." />
+                                        </div>
+                                        <div class="rounded border w-100 p-3">
+                                            <p class="d-flex align-items-center mb-0">
+                                                <i class="fab fa-cc-paypal fa-2x fa-lg text-dark pe-2"></i>PayPal
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-md-6 col-lg-4 col-xl-6">
+                                <form>
+                                    <div id="paymentForm">
+                                        <!-- Campos adicionales según el método de pago seleccionado -->
+                                        <!-- Aquí se agregarán los campos adicionales según el método de pago -->
+                                    </div>
+                                </form>
+                            </div>
+
+                          
+                            <div class="col-lg-4 col-xl-3">
+                                <!-- Campos comunes -->
+                                <div class="form-outline mb-4 mb-xl-5">
+                                    <input type="text" id="NombreJuridico" name="NombreJuridico" class="form-control form-control-lg" placeholder="Nombre" />
+                                    <label class="form-label" for="nombre">Nombre</label>
+                                </div>
+                                <div class="form-outline mb-4 mb-xl-5">
+                                    <input type="text" id="ApellidoJuridico" name="ApellidoJuridico" class="form-control form-control-lg" placeholder="Apellido" />
+                                    <label class="form-label" for="apellido">Apellido</label>
+                                </div>
+                                <div class="form-outline mb-4 mb-xl-5">
+                                    <input type="text" id="direccion" class="form-control form-control-lg" placeholder="Dirección" />
+                                    <label class="form-label" for="direccion">Dirección</label>
+                                </div>
+                                <div class="form-outline mb-4 mb-xl-5">
+                                    <input type="text" id="zipCode" class="form-control form-control-lg" placeholder="Código Postal" />
+                                    <label class="form-label" for="zipCode">Código Postal</label>
+                                </div>
+
+                                <button id="enviarBtn" name="enviarBtn" type="submit" class="btn-lg btn-close-white">
+                                    Pagar
+                                </button>
+                                <!-- Fin de campos comunes -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Función para mostrar los campos adicionales según el método de pago seleccionado
+            function mostrarCamposAdicionales(method) {
+                const paymentForm = document.getElementById('paymentForm');
+
+                // Limpiar los campos adicionales al cambiar de método de pago
+                paymentForm.innerHTML = '';
+
+                if (method === 'creditCard') {
+                    // Agregar campos adicionales para tarjeta de crédito si es necesario
+                    paymentForm.innerHTML = `
+                                <div class="row">
+                                    <div class="col-12 col-xl-6">
+                                        <div class="form-outline mb-4 mb-xl-5">
+                                            <input type="text" id="cardNumber" class="form-control form-control-lg" placeholder="Número de tarjeta" />
+                                            <label class="form-label" for="cardNumber">Número de tarjeta</label>
+                                        </div>
+                                        <div class="form-outline mb-4 mb-xl-5">
+                                            <input type="text" id="expirationDate" class="form-control form-control-lg" placeholder="Fecha de vencimiento" />
+                                            <label class="form-label" for="expirationDate">Fecha de vencimiento</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 col-xl-6">
+                                        <div class="form-outline mb-4 mb-xl-5">
+                                            <input type="text" id="cardName" class="form-control form-control-lg" placeholder="Nombre en la tarjeta" />
+                                            <label class="form-label" for="cardName">Nombre en la tarjeta</label>
+                                        </div>
+                                        <div class="form-outline mb-4 mb-xl-5">
+                                            <input type="text" id="cvv" class="form-control form-control-lg" placeholder="CVV" />
+                                            <label class="form-label" for="cvv">CVV</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                } else if (method === 'paypal') {
+                    // Agregar campos adicionales para PayPal si es necesario
+                    paymentForm.innerHTML = `
+                                <div class="form-outline mb-4 mb-xl-5">
+                                    <input type="email" id="paypalEmail" class="form-control form-control-lg" placeholder="Correo electrónico PayPal" />
+                                    <label class="form-label" for="paypalEmail">Correo electrónico PayPal</label>
+                                </div>
+                                <div class="form-outline mb-4 mb-xl-5">
+                                    <input type="password" id="paypalPassword" class="form-control form-control-lg" placeholder="Contraseña PayPal" />
+                                    <label class="form-label" for="paypalPassword">Contraseña PayPal</label>
+                                </div>
+                            `;
+                }
+            }
+
+            const paymentMethods = document.getElementsByName('paymentMethod');
+
+            // Inicializar la visualización de los campos adicionales al cargar la página
+            mostrarCamposAdicionales(document.querySelector('input[name="paymentMethod"]:checked').value);
+
+            // Agregar evento de cambio para mostrar los campos adicionales al cambiar el método de pago
+            paymentMethods.forEach(function (method) {
+                method.addEventListener('change', function () {
+                    mostrarCamposAdicionales(this.value);
+                });
+            });
+
+            // Agregar evento de click al botón de enviar
+            const enviarBtn = document.getElementById('enviarBtn');
+            enviarBtn.addEventListener('click', function () {
+                // Capturar los valores de los campos del formulario
+                const NombreJuridico = document.getElementById('NombreJuridico').value;
+                const ApellidoJuridico = document.getElementById('ApellidoJuridico').value;
+                const direccion = document.getElementById('direccion').value;
+                const zipCode = document.getElementById('zipCode').value;
+                const tipoPago = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+                // Construir un objeto con los datos del formulario
+                const formData = {
+                    NombreJuridico: NombreJuridico,
+                    ApellidoJuridico: ApellidoJuridico,
+                    Direccion: direccion,
+                    ZipCode: zipCode,
+                    TipoPago: tipoPago
+                };
+
+                // Agregar campos adicionales según el método de pago seleccionado
+                if (tipoPago === 'creditCard') {
+                    formData.CardNumber = document.getElementById('cardNumber').value;
+                    formData.ExpirationDate = document.getElementById('expirationDate').value;
+                    formData.CardName = document.getElementById('cardName').value;
+                    formData.CVV = document.getElementById('cvv').value;
+                } else if (tipoPago === 'paypal') {
+                    formData.PaypalEmail = document.getElementById('paypalEmail').value;
+                    formData.PaypalPassword = document.getElementById('paypalPassword').value;
+                }
+
+                // Realizar la solicitud POST al controlador
+                fetch('@Url.Action("ProcesarVenta", "Checkout")', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al enviar los datos');
+                        }
+                        Swal.fire({
+                            title: 'Nuevo',
+                            text: '¡Compra Realizada!',
+                            icon : 'success',
+
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+                            // Redirigir después de hacer clic en OK
+                            window.location.href = '@Url.Action("Index", "Home")';
+                        });
+                    })
+                    .then(data => {
+                        // Manejar la respuesta del servidor si es necesario
+                        console.log(data);
+                    })
+                    .catch(error => {
+                        // Manejar los errores si ocurren
+                        console.error(error);
+                    });
+            });
+        });
+    </script>
+}
+
