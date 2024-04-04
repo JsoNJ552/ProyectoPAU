@@ -1,14 +1,38 @@
-﻿using ProyectoPAU.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ProyectoPAU.Models;
 
 namespace ProyectoPAU.Services.UsuariosService
 {
-    public class UsuariosService : IUsuariosServicecs
+    public class UsuariosService : IUsuariosService
     {
 
+        private readonly TiendauContext _context;
 
-        public Task EditarUsuario(Usuario usuario)
+        public UsuariosService(TiendauContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+
+
+        public async Task EditarUsuario(Usuario usuario)
+        {
+            try
+            {
+
+                if(usuario!=null)
+                {
+                    _context.Update(usuario);
+                    await _context.SaveChangesAsync();
+
+
+                }
+
+
+            }catch (Exception ex)
+            {
+
+
+            }
         }
 
         public Task EliminarUsuario(int IdUsuario)
@@ -21,9 +45,55 @@ namespace ProyectoPAU.Services.UsuariosService
             throw new NotImplementedException();
         }
 
-        public Usuario obtenerUsuarioPorId(int IdUsuario)
+        public async  Task<Usuario> obtenerUsuarioPorEmail(Usuario email)
         {
-            throw new NotImplementedException();
+            try
+            {
+
+                Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.Email == email.Email);
+
+                if (usuario != null)
+                {
+
+                    return usuario;
+
+                }
+
+
+
+            }
+            catch (Exception ex)
+            {
+
+                
+
+            }
+
+            return null;
+
+        }
+
+        public async Task<Usuario> obtenerUsuarioPorId(int IdUsuario)
+        {
+            try
+            {
+
+               Usuario usuario= await _context.Usuarios.FirstOrDefaultAsync(x=> x.UsuarioId == IdUsuario);
+
+                if (usuario != null)
+                {
+
+                    return usuario;
+
+                }
+
+                
+
+            }catch (Exception ex) { 
+            
+            }
+
+            return null;
         }
 
         public Task<IEnumerable<Usuario>> obtenerUsuariosFiltro(Func<Usuario, bool> filtro = null)

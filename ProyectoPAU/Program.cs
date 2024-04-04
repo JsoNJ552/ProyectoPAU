@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using ProyectoPAU.Services.LoginService;
 using ProyectoPAU.Services.CarService;
 using ProyectoPAU.Services.VentasService;
+using ProyectoPAU.Services.UsuariosService;
 internal class Program
 {
     private static void Main(string[] args)
@@ -38,6 +39,7 @@ internal class Program
         builder.Services.AddScoped<Carrito>();
         builder.Services.AddScoped<CarritoActionFilter>();
         builder.Services.AddScoped<IVentasServicecs, VentaService>();
+        builder.Services.AddScoped<IUsuariosService, UsuariosService>();
         builder.Services.AddScoped< DetalleVenta>();
         builder.Services.AddHttpContextAccessor();
 

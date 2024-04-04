@@ -57,6 +57,9 @@ namespace ProyectoPAU.Controllers
                     }
 
                     HttpContext.Session.SetInt32("idUsuario", usuarioValido.UsuarioId);
+                    HttpContext.Session.SetString("Email", usuarioValido.Email);
+                    HttpContext.Session.SetString("Apellido", usuarioValido.Apellido);
+                    HttpContext.Session.SetString("Nombre", usuarioValido.Nombre);
 
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
 
@@ -68,10 +71,7 @@ namespace ProyectoPAU.Controllers
                 {
                     return BadRequest("Credenciales Incorrectas");
                 }
-                
-              
 
-                // Credenciales correctas
                 
             }
             catch (Exception ex)
@@ -80,6 +80,44 @@ namespace ProyectoPAU.Controllers
                 return StatusCode(500, "" + ex.Message);
             }
         }
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> VerificarPassword([FromBody] LoginUser usuario)
+        {
+            try
+            {
+                var usuarioValido = await _loginService.ValidateUserAsync(usuario);
+
+                if(usuarioValido != null)
+                {
+                    return Ok("Credenciales correctas");
+                }
+                else
+                {
+                    return BadRequest("Credenciales Incorrectas");
+                }
+
+
+               
+
+
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return StatusCode(500, "" + ex.Message);
+            }
+
+        }
+
+
+
+
+
+
+
 
 
         public async Task<IActionResult> mostrarUsuarios()

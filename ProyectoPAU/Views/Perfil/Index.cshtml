@@ -26,8 +26,8 @@
                         <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle" width="150">
                         <div class="mt-3">
                         <h4>@User.Identity.Name</h4>
-                           
-                            <button class="btn btn-outline-primary">Message</button>
+
+                        <a href="@Url.Action("editarPerfil","Perfil")" class="btn btn-outline-primary">Editar perfil</a>
                         </div>
                     </div>
                 </div>
@@ -39,7 +39,8 @@
                 </ul>
             </div>
         </div>
-        <div class="col-md-8">
+   
+         <div class="col-md-8">
             <div class="card mb-3">
                 <div class="card-body">
                     <div class="row">
@@ -47,7 +48,16 @@
                             <h6 class="mb-0">Full Name</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            @User.Identity.Name
+                        @ViewData["Nombre"]
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <h6 class="mb-0">Apellido</h6>
+                        </div>
+                        <div class="col-sm-9 text-secondary">
+                        @ViewData["Apellido"]
                         </div>
                     </div>
                     <hr>
@@ -56,40 +66,28 @@
                             <h6 class="mb-0">Email</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            fip@jukmuh.al
+                        @ViewData["Email"]
                         </div>
                     </div>
                     <hr>
+                
+                    <hr>
+
                     <div class="row">
-                        <div class="col-sm-3">
-                            <h6 class="mb-0">Phone</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                            (239) 816-9029
+                        <div class="col-sm-9"><div class="col-sm-9 text-secondary">
+                            <div class="col-sm-9 text-secondary"></>
+
                         </div>
                     </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <h6 class="mb-0">Mobile</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                            (320) 380-4539
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="row">
-                        <div class="col-sm-3">
-                            <h6 class="mb-0">Address</h6>
-                        </div>
-                        <div class="col-sm-9 text-secondary">
-                            Bay Area, San Francisco, CA
-                        </div>
-                    </div>
-                    <hr>
                   
                 </div>
             </div>
+
+            </div>
+        
+
+  
+   
 
             <div class="row gutters-sm">
                 <div class="col-sm-12 mb-3">

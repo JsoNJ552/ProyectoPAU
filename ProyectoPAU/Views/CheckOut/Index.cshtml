@@ -191,17 +191,15 @@
                 });
             });
 
-            // Agregar evento de click al botón de enviar
             const enviarBtn = document.getElementById('enviarBtn');
             enviarBtn.addEventListener('click', function () {
-                // Capturar los valores de los campos del formulario
+     
                 const NombreJuridico = document.getElementById('NombreJuridico').value;
                 const ApellidoJuridico = document.getElementById('ApellidoJuridico').value;
                 const direccion = document.getElementById('direccion').value;
                 const zipCode = document.getElementById('zipCode').value;
                 const tipoPago = document.querySelector('input[name="paymentMethod"]:checked').value;
 
-                // Construir un objeto con los datos del formulario
                 const formData = {
                     NombreJuridico: NombreJuridico,
                     ApellidoJuridico: ApellidoJuridico,
@@ -210,7 +208,7 @@
                     TipoPago: tipoPago
                 };
 
-                // Agregar campos adicionales según el método de pago seleccionado
+    
                 if (tipoPago === 'creditCard') {
                     formData.CardNumber = document.getElementById('cardNumber').value;
                     formData.ExpirationDate = document.getElementById('expirationDate').value;
@@ -221,7 +219,7 @@
                     formData.PaypalPassword = document.getElementById('paypalPassword').value;
                 }
 
-                // Realizar la solicitud POST al controlador
+             
                 fetch('@Url.Action("ProcesarVenta", "Checkout")', {
                     method: 'POST',
                     headers: {
@@ -240,8 +238,8 @@
 
                             confirmButtonText: 'OK'
                         }).then((result) => {
-                            // Redirigir después de hacer clic en OK
-                            window.location.href = '@Url.Action("Index", "Home")';
+                        
+                            window.location.href = '@Url.Action("Index", "Perfil")';
                         });
                     })
                     .then(data => {
