@@ -19,6 +19,8 @@ namespace ProyectoPAU.Services.ProductoService.ProductoService
 
         public Task EliminarrProducto(int IdProducto);
 
+        public Task<bool> VerificarCantidadProducots(int IdProducto);
+
 
 
 

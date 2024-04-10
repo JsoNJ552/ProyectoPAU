@@ -27,14 +27,11 @@ namespace ProyectoPAU.Services.VentasService
             throw new NotImplementedException();
         }
 
-        public async Task<List<DetalleVenta>> ObtenerVentas(int idventa)
+        public async Task<List<DetalleVenta>> ObtenerDetalleVentasPorIdVenta(int idventa)
         {
             try
             {
-              
 
-             
-             
                     // Obtener todos los detalles de venta relacionados con la venta actual
                     var detallesVenta = await _context.DetalleVenta
                         .Where(d => d.VentaId == idventa)
@@ -86,6 +83,41 @@ namespace ProyectoPAU.Services.VentasService
             }
             throw new NotImplementedException();
         }
+
+       
+
+        public List<DetalleVenta> ObtenerTodasDetalleVentasPorVenta(List<Venta> venta)
+        {
+
+            try
+            {
+
+                var ventasUsuario = new List<DetalleVenta>();
+
+                foreach (var ventas in venta)
+                {
+                    var primeraVentaDetalle = _context.DetalleVenta.Where(x => x.VentaId == ventas.IdVenta)
+                        .OrderBy(x => x.VentaId).Include(d => d.Producto).Include(d => d.Venta).FirstOrDefault();
+
+                    if (primeraVentaDetalle != null)
+                    {
+                        ventasUsuario.Add(primeraVentaDetalle);
+                    }
+                }
+
+                return ventasUsuario;
+
+
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            throw new NotImplementedException();
+        }
+
+
 
         public List <Venta> ObtenerVentasPorID(int usuarioID)
         {
@@ -145,5 +177,21 @@ namespace ProyectoPAU.Services.VentasService
             }
         }
 
+
+        public async Task<List<Venta>> ObtenerTodasLasVentas()
+        {
+            try
+            {
+                var todasLasVentas = new List<Venta>();
+                todasLasVentas = (List<Venta>)_context.Venta.ToList();
+
+                return todasLasVentas;
+            }
+            catch (Exception ex)
+            {
+                // Manejar la excepción según sea necesario
+                throw new Exception("Error al obtener las ventas con detalles y productos: " + ex.Message);
+            }
+        }
     }
 }

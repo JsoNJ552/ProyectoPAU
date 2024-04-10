@@ -78,7 +78,7 @@ namespace ProyectoPAU.Controllers
                 int? usuarioIDNullable = httpContext.Session.GetInt32("idUsuario");
 
                 var facturas = _ventasService.ObtenerVentasPorID((int)usuarioIDNullable);
-                var VentaDetallesPrimera = await _ventasService.ObtenerVentas(idVenta);
+                var VentaDetallesPrimera = await _ventasService.ObtenerDetalleVentasPorIdVenta(idVenta);
 
                 foreach (var pr in facturas)
                 {
@@ -132,16 +132,24 @@ namespace ProyectoPAU.Controllers
         }
 
 
-
+        [HttpPost]
         public async Task<IActionResult> guardarEditPerfil([FromBody] Usuario usuario)
         {
 
             
             try
             {
+               
+                usuario.Email= HttpContext.Session.GetString("Email");
+                var UsuarioEditar = await _usuariosService.obtenerUsuarioPorEmail(usuario);
+                UsuarioEditar.Nombre = usuario.Nombre;
+                UsuarioEditar.Email = usuario.Email;
+                await _usuariosService.EditarUsuario(UsuarioEditar);
 
+                return Ok("Ok");
 
-            }catch (Exception ex) { 
+            }
+            catch (Exception ex) { 
             
             }
 

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using ProyectoPAU.Models;
 using ProyectoPAU.Services.ProductoService.ProductoService;
+using System.Linq;
 
 namespace ProyectoPAU.Services.ProductoService
 {
@@ -122,7 +123,28 @@ namespace ProyectoPAU.Services.ProductoService
 
         }
 
+        public async Task <bool> VerificarCantidadProducots(int IdProducto)
+        {
+            try
+            {
+
+                var cantidad =  await _context.Productos.Where(x => x.Cantidad > 0 && x.IdProducto == IdProducto).FirstOrDefaultAsync();
+
+                if(cantidad != null) {
+
+                    return true;
+                
+                }
+
+            }catch (Exception ex) {
+
+                return false;
+            
+            }
+
+            return false;
 
 
+        }
     }
 }

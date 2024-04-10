@@ -35,8 +35,9 @@ namespace ProyectoPAU.Controllers
             try
             {
                 var usuarioValido = await _loginService.ValidateUserAsync(usuario);
+                bool usuarioLogin = await _loginService.VerificarContraseña(usuario.password, usuarioValido.Contraseña);
 
-                if (usuarioValido != null)
+                if (usuarioLogin)
                 {
                     var claims = new List<Claim>
                     {
@@ -83,14 +84,17 @@ namespace ProyectoPAU.Controllers
 
 
 
+
+
+
         [HttpPost]
-        public async Task<IActionResult> VerificarPassword([FromBody] LoginUser usuario)
+        public async Task<IActionResult> EditarGeneralUsuario([FromBody] LoginUser usuario)
         {
             try
             {
                 var usuarioValido = await _loginService.ValidateUserAsync(usuario);
 
-                if(usuarioValido != null)
+                if (usuarioValido != null)
                 {
                     return Ok("Credenciales correctas");
                 }
@@ -100,7 +104,7 @@ namespace ProyectoPAU.Controllers
                 }
 
 
-               
+
 
 
             }
@@ -141,7 +145,7 @@ namespace ProyectoPAU.Controllers
 
         }
 
-
+        //JWT q NO SE Usó al final
 
         [HttpPost]
         public async Task<IActionResult> Autenticar([FromBody] AutorizacionRequest autorizacion)

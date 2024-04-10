@@ -21,7 +21,7 @@ namespace ProyectoPAU.Services.UsuariosService
 
                 if(usuario!=null)
                 {
-                    _context.Update(usuario);
+                     _context.Update(usuario);
                     await _context.SaveChangesAsync();
 
 

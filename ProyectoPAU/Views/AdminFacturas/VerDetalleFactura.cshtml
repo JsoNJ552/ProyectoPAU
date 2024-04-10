@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewData["Title"] = "VerDetalleFactura";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@model List<DetalleVenta>
+<div class="table-responsive">
+    <table class="table table-responsive table-borderless">
+
+        <thead>
+            <tr class="bg-light">
+               
+                <th scope="col" width="20%">Nombre Juridico</th>
+                <th scope="col" width="20%">Apellido Juridico</th>
+                <th scope="col" width="20%">Direccion</th>
+                <th scope="col" width="20%">Fecha</th>
+                <th scope="col" width="20%">Producto</th>
+                <th scope="col" width="20%">Fecha</th>
+                <th scope="col" width="20%">TipoPago</th>
+                <th scope="col" width="20%">PrecioUnitario</th>
+                <th scope="col" width="20%">PrecioTotal</th>
+              
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var detalleVenta in Model)
+            {
+                <tr>
+                    <td>@detalleVenta.NombreJuridico</td>
+                    <td>@detalleVenta.ApellidoJuridico</td>
+                    <td>@detalleVenta.Direccion</td>
+                    <td>@detalleVenta.Venta.Fecha</td>
+                    <td>@detalleVenta.Producto.Nombre</td>
+                    <td>@detalleVenta.Venta.Fecha</td>
+                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">@detalleVenta.TipoPago</span></td>
+                    <td>₡ @detalleVenta.PrecioUnitario</td>
+                    <td>₡ @detalleVenta.PrecioTotal</td>
+                    
+
+                </tr>
+
+            }
+
+            <hr />
+        </tbody>
+       
+
+       
+    </table>
+
+    <hr />
+
+
+    <div>
+        <i>Total de venta</i>
+        <input readonly value="₡ @ViewData["PrecioFinal"]" class="form-control border-0" />
+        <hr />
+        
+    </div>
+
+    <div>
+        <a href="@Url.Action("Index","AdminFacturas")" class="btn btn-dark">Volver</a>
+    </div>
+
+</div>
+

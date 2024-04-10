@@ -7,5 +7,7 @@ namespace ProyectoPAU.Services.LoginService
     {
         Task<Usuario> ValidateUserAsync(LoginUser user);
         Task<Usuario> GetUserAsync(string email);
+
+        public Task<bool> VerificarContraseña(string contraseña, string hashContraseña);
     }
 }

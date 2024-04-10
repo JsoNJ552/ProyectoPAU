@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using ProyectoPAU.Models;
+using BCrypt.Net;
 
 namespace ProyectoPAU.Services.Registro
 {
@@ -36,6 +37,8 @@ namespace ProyectoPAU.Services.Registro
         {
             try
             {
+                string HashPassword = BCrypt.Net.BCrypt.HashPassword(usuario.Contraseña);
+                usuario.Contraseña = HashPassword;  
                 _context.Usuarios.Add(usuario);
                 await _context.SaveChangesAsync();
 
@@ -49,5 +52,7 @@ namespace ProyectoPAU.Services.Registro
             }
 
         }
+
+        
     }
 }

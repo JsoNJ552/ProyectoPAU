@@ -41,7 +41,7 @@
         <div class="card mb-3">
             <div class="card-body">
 
-                <form id="FormEditProfile">
+                <form id="miFormulario">
 
                     <div class="row">
                         <div class="col-sm-3">
@@ -68,7 +68,7 @@
                             <h6 class="mb-0">Email</h6>
                         </div>
                         <div class="col-sm-9 text-secondary">
-                            <input name="Emial" id="Email" class="form-control border-0" value="@ViewData["Email"]" />
+                            <input name="Emial" readonly id="Email" class="form-control border-0" value="@ViewData["Email"]" />
                         </div>
                     </div>
                     <hr>
@@ -120,25 +120,53 @@
         document.getElementById('miFormulario').addEventListener('submit', function (event) {
             event.preventDefault(); // Evitar que el formulario se envíe de forma tradicional
 
+            var Nombre = $('#Nombre').val()
+            var Apellido = $('#Apellido').val()
+            var Email = $('#Email').val()
+
+            var usuario = {
+                Nombre : Nombre,
+                Apellido : Apellido,
+                Email : Email
+
+            }
+
             const formData = new FormData(this); // Crear objeto FormData con los datos del formulario
 
-            fetch('@Url.Action("Perfil","")', {
-                method: 'POST', // Método HTTP
-                body: formData // Pasar FormData como cuerpo de la solicitud
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la solicitud');
+            $.ajax({
+                url: '@Url.Action("guardarEditPerfil", "Perfil")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(usuario),
+                success: function (response) {
+                    if (response === "Ok") {
+                        Swal.fire({
+                            title: 'Nuevo',
+                            text: '¡Perfil Actualizado!',
+                            icon: 'success',
+
+                            confirmButtonText: 'OK'
+                        }).then((result) => {
+
+                            window.location.href = '@Url.Action("Index", "Perfil")';
+                        });
+
+                    } else if (response === "bad") {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: response
+                        });
                     }
-                    console.log('exito'); // Convertir la respuesta a formato JSON
-                })
-                .then(data => {
-                    console.log('Respuesta recibida:', data);
-                    // Aquí puedes manejar la respuesta recibida
-                })
-                .catch(error => {
-                    console.error('Hubo un problema con la solicitud fetch:', error);
-                });
+                },
+                error: function (xhr, status, error) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: 'Error al procesar la solicitud: ' + xhr.responseText + error + status
+                    });
+                }
+            });
         });
 
     </script>

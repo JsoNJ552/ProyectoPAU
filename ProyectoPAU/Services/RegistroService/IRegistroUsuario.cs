@@ -10,5 +10,8 @@ namespace ProyectoPAU.Services.Registro
 
         Task RegistrarUsuario(Usuario usuario);
 
+
+        
+
     }
 }

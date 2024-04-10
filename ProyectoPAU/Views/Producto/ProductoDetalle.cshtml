@@ -36,7 +36,9 @@
                         <div class="row">
                             <div>
                                 <label>Cantidad </label>
-                                <input id="cantidad" class="form-control" type="number"/>
+                                <input id="cantidad" class="form-control" type="number" onkeydown="return false" oninput="validarInput(this)"/>
+                            
+
                             </div>
                         </div>
                         <div class="bottom-content">
@@ -87,6 +89,25 @@
 
 
 @section Scripts {
+
+    <script>
+
+        function validarInput(input) {
+            // Obtener el valor del input
+            var valor = input.value;
+
+            // Obtener el número máximo de dígitos permitidos
+            var maxLength = parseInt(input.getAttribute('maxlength'));
+
+            // Verificar si el valor supera la longitud máxima permitida
+            if (valor.length > maxLength) {
+                // Si supera el límite, truncar el valor
+                input.value = valor.slice(0, maxLength);
+            }
+        }
+
+
+    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const botonAgregarAlCarrito = document.getElementById('btnAgregarAlCarrito');

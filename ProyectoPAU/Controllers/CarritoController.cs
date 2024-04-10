@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ProyectoPAU.Models;
 using ProyectoPAU.Services.CarService;
+using ProyectoPAU.Services.ProductoService.ProductoService;
 
 namespace ProyectoPAU.Controllers
 {
@@ -9,15 +10,18 @@ namespace ProyectoPAU.Controllers
 
         private readonly ICarService _carService;
         private readonly IHttpContextAccessor _httpContextAccesso;
+        private readonly IProductService _productService;
         private readonly Carrito _carrito;
         private readonly CarritoDetalle _carritoDetalle;
+        
 
-        public CarritoController(ICarService carService, Carrito carrito, IHttpContextAccessor httpContextAccesso, CarritoDetalle carritoDetalle)
+        public CarritoController(ICarService carService, Carrito carrito,IProductService productService, IHttpContextAccessor httpContextAccesso, CarritoDetalle carritoDetalle)
         {
             _carService = carService;
             _httpContextAccesso = httpContextAccesso;
             _carritoDetalle = carritoDetalle;
             _carrito = carrito;
+            _productService = productService;
 
         }
 
@@ -29,7 +33,7 @@ namespace ProyectoPAU.Controllers
 
 
         [HttpPost]
-        public async Task<IActionResult> AgregarAlCarrito([FromBody]CarritoDetalle carritoDe)
+        public async Task<IActionResult>AgregarAlCarrito([FromBody]CarritoDetalle carritoDe)
         {
             try
             {
@@ -46,12 +50,7 @@ namespace ProyectoPAU.Controllers
                 Console.Write("Cantidad Productos" + " " + cantidadProductos + "Usuario " + usuarioIDNullable);
 
                 var carritoNullable = await _carService.BuscarAsyncCarrito((int)usuarioIDNullable);
-
-                
-
-               
-
-;
+                bool cantidadProductosDisponible = await  _productService.VerificarCantidadProducots((int)productoID);
 
                 if(carritoNullable != null)
                 {
