@@ -1,5 +1,11 @@
-﻿@using ProyectoPAU.Models
+﻿
+@{
+    ViewData["Title"] = "VerProductosTipo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using ProyectoPAU.Models
 @model List<ProyectoPAU.Models.Producto>
+
 
 @section Estilos {
     <link rel="stylesheet" href="~/css/cards.css" />
@@ -11,23 +17,8 @@
     <div class="container mt-4">
         <div class="row">
             <div class="col-12 d-flex justify-content-center text-center">
-                @foreach(var categorias in ViewData["Categorias"] as List<CategoriaProducto>)
-                {
-                    <a href="@Url.Action("VerProductosTipo", "BusquedasInicio", new { categoria = categorias.Nombre })" class="mx-4 btn">@categorias.Nombre</a>
-
-                    
-                }
-                
-            
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid bg-transpsarent my-4 p-3" style="position: relative;">
-
-
-
-        <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+               
+               
 
 
             @foreach (var producto in Model)
@@ -69,14 +60,25 @@
             }
         </div>
     </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid bg-transpsarent my-4 p-3" style="position: relative;">
+
+
+
+        <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3">
+
+
+        </div>
+    </div>
 
     <div id="chartdiv">
-
     </div>
 
 </main>
 
 
-@section Scripts{
 
-}
+

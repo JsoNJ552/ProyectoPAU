@@ -3,7 +3,7 @@
     ViewData["Title"] = "Editar";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-
+@model ProyectoPAU.Models.Producto
 @section Estilos {
     <link rel="stylesheet" href="~/css/ProductoDetalle.css" />
 }
@@ -24,6 +24,7 @@
                             <div class="controls">
                                 <div class="form-group">
                                     <label for="precio">Nombre:</label>
+                                    <input type="hidden" class="form-control" id="IdProducto" value="@Model.IdProducto" name="IdProducto" placeholder="Ingrese el nombre del producto">
                                     <input type="text" class="form-control" id="nombre" value="@Model.Nombre" name="nombre" placeholder="Ingrese el nombre del producto">
                                 </div>
                                 <div class="form-group">
@@ -36,10 +37,15 @@
                                 </div>
                                 <div class="form-group">
                                     <label for="categoria">Categoría:</label>
-                                    <select class="form-control" id="categoria" name="categoria">
-                                        <option value="">Selecciona una categoría</option>
-
+                                    <select class="form-control" id="IdCategoria" name="IdCategoria">
+                                        <option value="@Model.IdCategoriaNavigation.IdCategoria">@Model.IdCategoriaNavigation.Nombre</option>
+                                        @foreach (var categorinas in ViewData["Categorias"] as List<CategoriaProducto>)
+                                        {
+                                            <option value="@categorinas.IdCategoria">@categorinas.Nombre</option>
+                                        }
                                     </select>
+
+
 
 
                                 </div>
@@ -55,20 +61,57 @@
                                     <label for="marca">Marca:</label>
                                     <input type="text" class="form-control" value="@Model.Marca" id="marca" name="marca" placeholder="Ingrese la marca del producto">
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="number">Cantidad:</label>
+                                    <input type="number" class="form-control"  value="@Model.Cantidad" id="cantidad" name="cantidad" placeholder="@Model.Cantidad">
+                                </div>
+
+                               
+
+                                <div class="form-group">
+                                    <label for="Activo">Activo:</label>
+                                    <select class="form-control" id="Activo" name="Activo">
+                                        @if (Model.Activo==true)
+                                        {
+                                            <option value="@Model.Activo">Activo</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@Model.Activo">Desactivado</option>
+                                        }
+
+                                      
+                                        <option value="true">Activado</option>
+                                        <option value="false">Desactivado</option>
+                                       
+                                    </select>
+
+
+
+
+                                </div>
+
+
+
+
                                 <div class="form-group">
                                     <label for="foto">Foto:</label>
                                     <div id="previewContainer">
-                                        @if (!string.IsNullOrEmpty(@Model.Foto))
+                                        @if (!string.IsNullOrEmpty(Model.Foto))
                                         {
                                             <img id="fotoPreview" src="data:image/png;base64,@Model.Foto" class="card-img-top" alt="Foto del producto">
                                         }
                                         else
                                         {
-                                            <img id="fotoPreview" src="~/images/default.png" class="card-img-top" alt="Imagen predeterminada">
+                                            <img id="defaultPreview" src="url_de_la_imagen_predeterminada" class="card-img-top" alt="Imagen predeterminada">
                                         }
                                     </div>
-                                    <input type="file" class="form-control" id="photoFile" name="photoFile" placeholder="Seleccione la foto del producto" onchange="previewFile()">
+                                    <input type="file" value="@Model.Foto" class="form-control" id="photoFile" name="photoFile">
+                                   
                                 </div>
+                               
+                                                              
 
                                 <div class="row mt-2">
                                     <div class="col">
@@ -99,23 +142,61 @@
     </div>
 </div>
 
-@section Scripts{
+@section Scripts {
     <script>
-        function previewFile() {
-            const preview = document.getElementById('fotoPreview');
-            const file = document.querySelector('input[type=file]').files[0];
-            const reader = new FileReader();
+        $(document).ready(function () {
+            $('#formularioProducto').submit(function (event) {
+                event.preventDefault();
 
-            reader.onloadend = function () {
-                preview.src = reader.result;
-            };
+                // Crear objeto FormData
+                var producto = new FormData(this);
 
-            if (file) {
-                reader.readAsDataURL(file);
-            } else {
-                preview.src = "";
-            }
-        }
+                // Obtener el valor seleccionado del campo select
+                var categoriaSeleccionada = $('#IdCategoria').val();
+
+                // Agregar el valor seleccionado al FormData
+                producto.append('IdCategoria', categoriaSeleccionada);
+
+                // Verificar si el checkbox está marcado y agregar su estado al FormData
+                var activo = document.getElementById('Activo');
+
+                if(activo==true){
+                    producto.append('Activo', activo);
+
+                }else{
+                    producto.append('Activo', activo);
+                }
+               
+                console.log(producto); // Verificar el contenido del FormData en la consola
+
+                // Realizar la llamada AJAX
+                $.ajax({
+                    url: '@Url.Action("GuardarEditarProducto", "AdminProducto")',
+                    type: 'POST',
+                    processData: false,
+                    contentType: false,
+                    data: producto,
+                    success: function (response) {
+                        if (response === "Producto editado correctamente.") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: 'Producto editado correctamente.'
+                            });
+                            // Realizar cualquier acción adicional después de editar el producto
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '¡Error!',
+                            text: 'Hubo un problema al editar el producto.' + xhr.responseText + error + status
+                        });
+                    }
+                });
+            });
+        });
     </script>
 }
+
 

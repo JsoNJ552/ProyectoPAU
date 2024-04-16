@@ -102,7 +102,7 @@ namespace ProyectoPAU.Controllers
 
 
 
-        public async Task<IActionResult> editarPerfil()
+        public async Task<IActionResult>editarPerfil()
         {
 
             try

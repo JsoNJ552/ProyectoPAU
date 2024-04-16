@@ -5,6 +5,7 @@ using System.Text.Json;
 using ProyectoPAU.Services.VentasService;
 using Microsoft.AspNetCore.Http;
 using ProyectoPAU.Services.CarService;
+using ProyectoPAU.Services.ProductoService.ProductoService;
 
 namespace ProyectoPAU.Controllers
 {
@@ -15,14 +16,16 @@ namespace ProyectoPAU.Controllers
         private readonly IVentasServicecs _ventaServices;
         private readonly ICarService _carService;
         private readonly CarritoDetalle _carritoDetalle;
+        private readonly IProductService _productService;
 
-        public CheckOutController(IHttpContextAccessor HttpContextAccessor,ICarService carService , IVentasServicecs ventaServices,CarritoDetalle carritoDetalle)
+        public CheckOutController(IHttpContextAccessor HttpContextAccessor, IProductService productService,ICarService carService , IVentasServicecs ventaServices,CarritoDetalle carritoDetalle)
         {
             
             _httpContextAccessor =  HttpContextAccessor;
             _ventaServices = ventaServices;
             _carService = carService;
             _carritoDetalle = carritoDetalle;
+            _productService = productService;
         }
         public IActionResult Index()
         {
@@ -40,27 +43,9 @@ namespace ProyectoPAU.Controllers
                 // Obtener los detalles del carrito desde HttpContext.Items
                 var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
 
-                // Mostrar todos los detalles del carrito en la consola
-                Console.WriteLine("Detalles del Carrito:");
-                foreach (var detalle in carritoDetalle)
-                {
-                    
-                    Console.WriteLine($"ID Producto: {detalle.IdProducto}, Cantidad:" +
-                        $" {detalle.Cantidad}, Precio Unitario: {detalle.PrecioUnitario}, Precio Total:" +
-                        $" {detalle.PrecioTotal}");
-                    // Puedes agregar más propiedades si es necesario
-                }
 
 
                 int? usuarioIDNullable = HttpContext.Session.GetInt32("idUsuario");
-
-
-
-
-            
-
-
-
 
                 // Crear una nueva instancia de Venta y asignar los valores necesarios
                 var venta = new Venta
@@ -69,6 +54,8 @@ namespace ProyectoPAU.Controllers
                     Fecha = DateOnly.FromDateTime(DateTime.Now),
                     UsuarioId = usuarioIDNullable,
                 };
+
+               
 
                 // Crear una lista para almacenar todos los detalles de venta
                 var detallesVenta = new List<DetalleVenta>();
@@ -90,6 +77,16 @@ namespace ProyectoPAU.Controllers
                         TipoPago = formData.TipoPago,
                         // Asignar otros valores del detalle de venta si es necesario
                     });
+
+                    var productoEditar = new Producto
+                    {
+                        IdProducto = (int)cd.IdProducto,
+                        Cantidad = cd.Cantidad
+                    };
+                    await _productService.EditarCantidadProductos(productoEditar);
+
+                    
+
                 }
 
                 // Llamar al método RegistrarVenta para procesar la venta con todos los detalles
@@ -111,8 +108,6 @@ namespace ProyectoPAU.Controllers
                         IdCarrito = carritoNullable.Id
 
                     };
-
-
 
                     await _carService.EliminarCarritosDetalles((int)nuevoCarritoDetalle.IdCarrito);
 

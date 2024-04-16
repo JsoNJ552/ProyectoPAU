@@ -16,10 +16,38 @@ namespace ProyectoPAU.Services.ProductoService
 
         }
 
-        public Task EditarrProducto(Producto producto)
+        public  async Task EditarrProducto(Producto producto, IFormFile photoFile)
         {
 
-            return Task.CompletedTask;
+            try
+            {
+                if(photoFile != null)
+                {
+
+                    var filePath = Path.Combine("wwwroot", "images", photoFile.FileName);
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await photoFile.CopyToAsync(stream);
+                    }
+                    byte[] photoBytes = await System.IO.File.ReadAllBytesAsync(filePath);
+                    string photoBase64 = Convert.ToBase64String(photoBytes);
+
+                    producto.Foto = photoBase64;
+
+                }
+               
+
+
+               
+                    _context.Productos.Update(producto);
+                    await _context.SaveChangesAsync();  
+            
+
+            }catch (Exception ex) { 
+            
+            }
+
+
             
         }
 
@@ -75,13 +103,13 @@ namespace ProyectoPAU.Services.ProductoService
             }
         }
 
-        public Producto obtenerProductosPorId(int idProducto)
+        public async Task <Producto> obtenerProductosPorId(int idProducto)
         {
             try
             {
-                var producto = _context.Productos
+                var producto =  await _context.Productos.Include(x=>x.IdCategoriaNavigation)
                     
-                    .FirstOrDefault(p => p.IdProducto == idProducto );
+                    .FirstOrDefaultAsync(p => p.IdProducto == idProducto );
 
                 return producto;
             }
@@ -90,8 +118,9 @@ namespace ProyectoPAU.Services.ProductoService
                 // Aquí deberías manejar el error apropiadamente en lugar de lanzar una excepción no implementada.
                 throw new Exception("Error al obtener el producto por ID.", ex);
             }
-        }
 
+            return null; 
+        }
 
 
 
@@ -110,11 +139,11 @@ namespace ProyectoPAU.Services.ProductoService
                 string photoBase64 = Convert.ToBase64String(photoBytes);
 
                 producto.Foto = photoBase64;
-                
-                    _context.Add(producto);
-                    await _context.SaveChangesAsync();
 
-                
+                _context.Add(producto);
+                await _context.SaveChangesAsync();
+
+
             }
             catch (Exception ex)
             {
@@ -123,12 +152,13 @@ namespace ProyectoPAU.Services.ProductoService
 
         }
 
-        public async Task <bool> VerificarCantidadProducots(int IdProducto)
+
+        public async Task <bool> VerificarCantidadProducots(int IdProducto, int cantidadSolicitada)
         {
             try
             {
 
-                var cantidad =  await _context.Productos.Where(x => x.Cantidad > 0 && x.IdProducto == IdProducto).FirstOrDefaultAsync();
+                var cantidad =  await _context.Productos.Where(x => x.Cantidad >= cantidadSolicitada && x.IdProducto == IdProducto).FirstOrDefaultAsync();
 
                 if(cantidad != null) {
 
@@ -145,6 +175,25 @@ namespace ProyectoPAU.Services.ProductoService
             return false;
 
 
+        }
+
+        public async Task EditarCantidadProductos(Producto producto)
+        {
+            try
+            {
+              
+
+                var productoEditar = await _context.Productos.Where(x=> x.IdProducto == producto.IdProducto).FirstAsync();
+                productoEditar.Cantidad = productoEditar.Cantidad - producto.Cantidad;
+                _context.Update(productoEditar);
+                await _context.SaveChangesAsync();  
+            
+
+
+            }catch  (Exception ex)
+            {
+
+            }
         }
     }
 }

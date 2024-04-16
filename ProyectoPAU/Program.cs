@@ -16,6 +16,7 @@ using ProyectoPAU.Services.LoginService;
 using ProyectoPAU.Services.CarService;
 using ProyectoPAU.Services.VentasService;
 using ProyectoPAU.Services.UsuariosService;
+using ProyectoPAU.Services.ProductosInicioService;
 internal class Program
 {
     private static void Main(string[] args)
@@ -33,6 +34,8 @@ internal class Program
         builder.Services.AddScoped<IAutorizacionService, AutorizacionService>();
         builder.Services.AddScoped<ICategoriasService, CategoriasService>();
         builder.Services.AddScoped<IProductService, ProductService>();
+        builder.Services.AddScoped<IProductosInicioService, ProductosInicioService>();
+
         builder.Services.AddScoped<ICarService, CarService>();
        
         builder.Services.AddScoped< CarritoDetalle>();
@@ -42,7 +45,6 @@ internal class Program
         builder.Services.AddScoped<IUsuariosService, UsuariosService>();
         builder.Services.AddScoped< DetalleVenta>();
         builder.Services.AddHttpContextAccessor();
-
 
         // Configurar la base de datos
         builder.Services.AddDbContext<TiendauContext>(options =>

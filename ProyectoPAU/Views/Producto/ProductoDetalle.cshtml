@@ -36,9 +36,8 @@
                         <div class="row">
                             <div>
                                 <label>Cantidad </label>
-                                <input id="cantidad" class="form-control" type="number" onkeydown="return false" oninput="validarInput(this)"/>
-                            
-
+                                <input id="cantidad" class="form-control" type="number" />
+                               
                             </div>
                         </div>
                         <div class="bottom-content">
@@ -87,27 +86,7 @@
     </div>
 </div>
 
-
 @section Scripts {
-
-    <script>
-
-        function validarInput(input) {
-            // Obtener el valor del input
-            var valor = input.value;
-
-            // Obtener el número máximo de dígitos permitidos
-            var maxLength = parseInt(input.getAttribute('maxlength'));
-
-            // Verificar si el valor supera la longitud máxima permitida
-            if (valor.length > maxLength) {
-                // Si supera el límite, truncar el valor
-                input.value = valor.slice(0, maxLength);
-            }
-        }
-
-
-    </script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const botonAgregarAlCarrito = document.getElementById('btnAgregarAlCarrito');
@@ -115,24 +94,14 @@
             botonAgregarAlCarrito.addEventListener('click', function () {
                 // Obtener la ID del producto desde el modelo de Razor
                 let productoId = '@Model.IdProducto';
-
-                let precioUnitario = '@Model.Precio'
-
-                // Obtener la cantidad ingresada por el usuario (ejemplo: asumiendo que el input tiene ID 'cantidad')
-                let cantidadInput = document.getElementById('cantidad');
-                let cantidad = parseInt(cantidadInput.value); // Convertir la cantidad a un número entero
-
-                // Verificar si la cantidad es un número válido
-                if (isNaN(cantidad)) {
-                    console.error('La cantidad ingresada no es un número válido');
-                    return; // Salir de la función si la cantidad no es válida
-                }
+                let precioUnitario = '@Model.Precio';
+                let cantidad = document.getElementById('cantidad').value;
 
                 // Crear un objeto con los datos del producto
                 const carrito = {
-                    idProducto: productoId,
-                    cantidad: cantidad,
-                    precioUnitario: precioUnitario
+                    IdProducto: productoId,
+                    Cantidad: cantidad,
+                    PrecioUnitario: precioUnitario
                 };
 
                 // Realizar una solicitud POST al servidor
@@ -143,17 +112,31 @@
                     },
                     body: JSON.stringify(carrito)
                 })
-                    .then(response => {
-                        if (response.ok) {
+                    .then(response => response.text()) // Leer el cuerpo de la respuesta como texto
+                    .then(data => {
+                        if (data === "Producto agregado al carrito correctamente") {
                             // Manejar la respuesta si es exitosa
                             Swal.fire({
                                 title: 'Nuevo',
                                 text: '¡Producto agregado!',
-                              
                                 confirmButtonText: 'OK'
                             }).then((result) => {
                                 // Redirigir después de hacer clic en OK
                                 window.location.href = '@Url.Action("Index", "Home")';
+                            });
+                        } else if (data === "CantidadMayor") {
+                            // Manejar errores si la respuesta no es exitosa
+                            Swal.fire({
+                                title: 'Limite',
+                                text: '¡El limite es de 5 productos!',
+                                confirmButtonText: 'OK'
+                            });
+                        } else if (data === "Nohaysuficiente") {
+                            // Manejar errores si la respuesta no es exitosa
+                            Swal.fire({
+                                title: 'Stock',
+                                text: '¡No hay suficientes productos actualmente !',
+                                confirmButtonText: 'OK'
                             });
                         } else {
                             // Manejar errores si la respuesta no es exitosa
@@ -163,11 +146,9 @@
                     .catch(error => {
                         console.error('Error:', error);
                     });
+
             });
         });
-
-
     </script>
 }
-
 

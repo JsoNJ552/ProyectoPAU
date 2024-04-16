@@ -39,9 +39,13 @@ namespace ProyectoPAU.Controllers
         public async Task<IActionResult> Index()
         {
             try
-            {   //Crea el carrito automaticamente a un usuario recien registrado
+            {
+                //SECTION CARRITO
+                var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
+                //Crea el carrito automaticamente a un usuario recien registrado
+                
 
-                if(User.Identity.IsAuthenticated)
+                if (User.Identity.IsAuthenticated)
                 {
                     var httpContext = _httpContextAccessor.HttpContext;
                     int? usuarioIDNullable = httpContext.Session.GetInt32("idUsuario");
@@ -56,11 +60,31 @@ namespace ProyectoPAU.Controllers
                         };
                         await _carService.CrearCarrito(nuevoCarrito);
                     }
+                    int cantidadProductosCarro = 0;
+                    foreach (var cantidadProductosCarrito in carritoDetalle as List<CarritoDetalle>)
+                    {
+                        cantidadProductosCarro = cantidadProductosCarro + (int)cantidadProductosCarrito.Cantidad;
+
+                    }
+
+                    ViewData["CantidadProductos"] = cantidadProductosCarro;
+
                 }
 
 
 
-                var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
+               
+               /* ;
+
+               SECCION Categorias
+
+               */
+
+
+
+
+
+                
                 ViewData["Carrito"] = carritoDetalle;
 
                 List<CategoriaProducto> listaCategorias = await _categoriasService.obtenerProductosAsync();

@@ -23,19 +23,14 @@ namespace ProyectoPAU.Controllers
         }
 
 
-        public IActionResult Index()
+        public async Task <IActionResult> Index()
         {
 
             try
             {
-                var httpContext = _httpContextAccessor.HttpContext;
-                int? usuarioIDNullable = httpContext.Session.GetInt32("idUsuario");
+                List<Usuario> Usuarios = await _usuariosService.obtenerUsuarios(); 
 
-
-                var facturas = _ventasService.ObtenerVentasPorID((int)usuarioIDNullable);
-                var VentaDetallesPrimera = _ventasService.ObtenerDetalleVentasPorUsuarioId(facturas);
-
-                return View(VentaDetallesPrimera);
+                return View(Usuarios);
 
             }
             catch (Exception ex)
@@ -47,5 +42,102 @@ namespace ProyectoPAU.Controllers
 
             return View();
         }
+        [HttpPost]
+        public async Task<IActionResult> DesactivarUsuario(string email)
+        {
+
+
+            try
+            {
+                Console.WriteLine("EMAIL A DESACTIVAR"+email);
+                await _usuariosService.EliminarUsuario(email);
+                return RedirectToAction("Index");
+
+
+            }catch (Exception ex)
+            {
+
+
+            }
+            return View();
+          
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> EditarUsuario(string Email)
+        {
+
+
+            try
+            {
+                Usuario usuarioBuscar = new Usuario
+                {
+                    Email = Email
+                };
+
+                var roles = await _usuariosService.obtenerRoles();
+                ViewData["Roles"] = roles;
+
+                Usuario usuarioEditar = await _usuariosService.obtenerUsuarioPorEmail(usuarioBuscar);
+              
+                Console.WriteLine("EMAIL A DESACTIVAR" + Email);
+               
+                return View(usuarioEditar);
+
+
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return View();
+
+        }
+
+
+
+
+        [HttpPost]
+        public async Task<IActionResult> GuardarEditarUsuario([FromForm] Usuario usuario)
+        {
+            try
+            {
+
+             
+                Usuario usuarioEditar = await _usuariosService.obtenerUsuarioPorEmail(usuario);
+                usuarioEditar.Nombre = usuario.Nombre;
+                usuarioEditar.Email = usuario.Email;
+                usuarioEditar.Apellido = usuario.Apellido;
+                usuarioEditar.RolId = usuario.RolId;
+                usuarioEditar.Activo = usuario.Activo;
+
+                await _usuariosService.EditarUsuario(usuarioEditar);
+
+               
+
+
+
+
+
+
+
+
+
+
+
+                return Ok("Usuario editado correctamente.");
+            }
+            catch (Exception ex)
+            {
+                // Aquí deberías manejar el error apropiadamente en lugar de simplemente ignorarlo.
+                Console.WriteLine("Error al editar el producto: " + ex.Message);
+                return RedirectToAction("Index", "Error"); // Redirige a una página de error.
+            }
+        }
+
+
+
     }
 }

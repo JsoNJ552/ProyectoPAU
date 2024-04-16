@@ -35,13 +35,30 @@ namespace ProyectoPAU.Services.UsuariosService
             }
         }
 
-        public Task EliminarUsuario(int IdUsuario)
+        public async Task EliminarUsuario(string email )
         {
-            throw new NotImplementedException();
+            try
+            {
+                Usuario usuarioDesactivar = await _context.Usuarios.Where(x=>x.Email.Equals(email)).FirstAsync();
+                usuarioDesactivar.Activo = false;
+                 _context.Usuarios.Update(usuarioDesactivar);
+                await _context.SaveChangesAsync();
+
+            }catch (Exception ex)
+            {
+
+            }
         }
 
-        public Task<List<Usuario>> obtenerUsuario()
+        public async Task<List<Usuario>> obtenerUsuarios()
         {
+            try
+            {
+                var usuarios = await _context.Usuarios.ToListAsync();
+                return usuarios;
+
+            }catch (Exception ex) { 
+            }
             throw new NotImplementedException();
         }
 
@@ -50,7 +67,7 @@ namespace ProyectoPAU.Services.UsuariosService
             try
             {
 
-                Usuario usuario = await _context.Usuarios.FirstOrDefaultAsync(x => x.Email == email.Email);
+                var usuario = await _context.Usuarios.Include(x=> x.Rol). FirstOrDefaultAsync(x => x.Email == email.Email);
 
                 if (usuario != null)
                 {
@@ -103,6 +120,23 @@ namespace ProyectoPAU.Services.UsuariosService
 
         public Task RegistrarUsuario(Usuario usuario, IFormFile photoFile)
         {
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Rol>> obtenerRoles()
+        {
+
+            try
+            {
+
+                var roles = await _context.Rols.ToListAsync();
+                return roles;
+
+            }catch (Exception ex)
+            {
+
+
+            }
             throw new NotImplementedException();
         }
     }

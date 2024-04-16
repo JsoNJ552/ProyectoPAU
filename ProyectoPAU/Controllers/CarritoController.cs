@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoPAU.Models;
 using ProyectoPAU.Services.CarService;
 using ProyectoPAU.Services.ProductoService.ProductoService;
@@ -31,62 +32,54 @@ namespace ProyectoPAU.Controllers
             return View();
         }
 
-
         [HttpPost]
-        public async Task<IActionResult>AgregarAlCarrito([FromBody]CarritoDetalle carritoDe)
+        public async Task<IActionResult> AgregarAlCarrito([FromBody] CarritoDetalle carritoDe)
         {
             try
             {
+                if (carritoDe.Cantidad > 5)
+                {
+                    return Ok("CantidadMayor");
+                }
 
                 var httpContext = _httpContextAccesso.HttpContext;
-                // Aquí puedes acceder a las propiedades de CarritoDetalle, como carrito.IdProducto y carrito.Cantidad
-                var cantidadProductos = carritoDe.Cantidad;
-                var  productoID = carritoDe.IdProducto;
-                var precioUnitario = carritoDe.PrecioUnitario;
-                var precioTotal = precioUnitario * cantidadProductos;
+
+                var precioTotal = carritoDe.PrecioUnitario * carritoDe.Cantidad;
                 int? usuarioIDNullable = httpContext.Session.GetInt32("idUsuario");
 
-
-                Console.Write("Cantidad Productos" + " " + cantidadProductos + "Usuario " + usuarioIDNullable);
-
                 var carritoNullable = await _carService.BuscarAsyncCarrito((int)usuarioIDNullable);
-                bool cantidadProductosDisponible = await  _productService.VerificarCantidadProducots((int)productoID);
-
-                if(carritoNullable != null)
+                bool cantidadProductosDisponible = await _productService.VerificarCantidadProducots((int)carritoDe.IdProducto, (int)carritoDe.Cantidad);
+                if (!cantidadProductosDisponible)
                 {
-
+                    return Ok("Nohaysuficiente");
+                }
+                if (carritoNullable != null)
+                {
                     var nuevoCarritoDetalle = new CarritoDetalle
                     {
                         IdCarrito = carritoNullable.Id,
-                        IdProducto = productoID,
-                        Cantidad = cantidadProductos,
-                        PrecioUnitario = precioUnitario,
+                        IdProducto = carritoDe.IdProducto,
+                        Cantidad = carritoDe.Cantidad,
+                        PrecioUnitario = carritoDe.PrecioUnitario,
                         PrecioTotal = precioTotal
                     };
 
 
 
+                
+
                     await _carService.addCarrito(nuevoCarritoDetalle);
-
-                    Console.WriteLine("existe un carrito para el usuario logueado" + " " + "Precio total"+" "+ nuevoCarritoDetalle.PrecioTotal);
+                    Console.WriteLine("existe un carrito para el usuario logueado" + " " + "Precio total" + " " + nuevoCarritoDetalle.PrecioTotal);
                 }
-               
 
-
-                // Luego, puedes llamar al servicio de carrito para agregar el producto al carrito
-
-                // Si la operación fue exitosa, puedes devolver un mensaje de éxito o algún otro resultado
                 return Ok("Producto agregado al carrito correctamente");
             }
             catch (Exception ex)
             {
-                // En caso de error, puedes devolver un mensaje de error
                 return StatusCode(500, $"Error al agregar el producto al carrito: {ex.Message}");
             }
-
-
-
         }
+
 
 
 
@@ -96,6 +89,9 @@ namespace ProyectoPAU.Controllers
         {
             try
             {
+             
+                
+
                 await _carService.EliminarCarritoDetalle(IdProducto);
                 return RedirectToAction("Index","home");
             }

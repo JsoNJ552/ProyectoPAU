@@ -8,7 +8,10 @@ namespace ProyectoPAU.Services.UsuariosService
 
         public Task RegistrarUsuario(Usuario usuario, IFormFile photoFile);
 
-        public Task<List<Usuario>> obtenerUsuario();
+        public Task<List<Usuario>> obtenerUsuarios();
+
+        public Task<List<Rol>> obtenerRoles();
+   
         public  Task<Usuario> obtenerUsuarioPorId(int IdUsuario);
 
         public Task<Usuario> obtenerUsuarioPorEmail(Usuario email);
@@ -17,7 +20,7 @@ namespace ProyectoPAU.Services.UsuariosService
 
         public Task EditarUsuario(Usuario usuario);
 
-        public Task EliminarUsuario(int IdUsuario);
+        public Task EliminarUsuario(string email);
 
 
 

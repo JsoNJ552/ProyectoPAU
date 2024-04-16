@@ -64,7 +64,7 @@ namespace ProyectoPAU.Controllers
         }
 
 
-        [HttpGet]
+     
         public async Task<IActionResult> Agregar()
         {
 
@@ -88,7 +88,7 @@ namespace ProyectoPAU.Controllers
                 }
 
                 producto.Activo = true;
-               
+
                 await _productoService.RegistrarProducto(producto, photoFile);
                 return Ok("Producto registrado correctamente.");
             }
@@ -99,28 +99,70 @@ namespace ProyectoPAU.Controllers
         }
 
 
-        public IActionResult Editar(int IdProducto)
+
+        [HttpPost]
+        public async Task<IActionResult> GuardarEditarProducto([FromForm] Producto producto, IFormFile photoFile)
         {
             try
             {
+                if (producto == null)
+                {
+                    return BadRequest("No se proporcionó ningún producto para editar.");
+                }
+
+              
+                    // Manejar el archivo de imagen
+                    var productoEditar = await _productoService.obtenerProductosPorId(producto.IdProducto);
+                    productoEditar.IdProducto = producto.IdProducto;
+                    productoEditar.Nombre = producto.Nombre;
+                    productoEditar.Marca = producto.Marca;
+                    productoEditar.Cantidad = producto.Cantidad;
+                    productoEditar.Tipo = producto.Tipo;
+                    productoEditar.DetalleVenta = producto.DetalleVenta;
+                    productoEditar.Activo = producto.Activo;
+                    productoEditar.Descripcion = producto.Descripcion;
+                    productoEditar.Detalles = producto.Detalles;
+                    productoEditar.IdCategoria = producto.IdCategoria;
+                    productoEditar.Activo  = producto.Activo;
+                   
+                    Console.WriteLine("Cosas"+productoEditar.Marca);
+                     Console.WriteLine(productoEditar.Activo+ "IDCATEGORIA" + " " + productoEditar.IdCategoria);
+                Console.WriteLine("Activo"+productoEditar.Activo);
+                await _productoService.EditarrProducto(productoEditar, photoFile);
+              
+
+                // Actualizar el producto en la base de datos
+                
+
+                return Ok("Producto editado correctamente.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Hubo un problema al editar el producto: " + ex.Message);
+            }
+        }
+
+        
+        [HttpGet]
+        public async Task <IActionResult> Editar(int IdProducto)
+        {
+            try
+            {
+
+                List<CategoriaProducto> listaCategorias = await _categoriasService.obtenerProductosAsync();
+
+                // Pasar la lista de categorías a la vista
+                ViewData["Categorias"] = listaCategorias;
                 Console.WriteLine(IdProducto);
 
-                var producto = _productoService.obtenerProductosPorId(IdProducto);
-                var categoria = _context.CategoriaProductos.Find(producto.IdCategoria);
-                ViewData["CategoriaProducto"] = categoria;
+                var producto = await _productoService.obtenerProductosPorId(IdProducto);
+               
+                
 
 
                
                
-                    if (!string.IsNullOrEmpty(producto.Foto))
-                    {
-                        // Convertir la imagen de Base64 a array de bytes
-                        byte[] bytes = Convert.FromBase64String(producto.Foto);
-
-                        // Guardar la imagen en el sistema de archivos
-                        string imagePath = $"wwwroot/images/Productos/{producto.IdProducto}.png";
-                        System.IO.File.WriteAllBytes(imagePath, bytes);
-                    }
+                   
             
 
 
@@ -133,6 +175,12 @@ namespace ProyectoPAU.Controllers
                 return RedirectToAction("Index", "Error"); // Redirige a una página de error.
             }
         }
+
+      
+
+
+
+
 
 
         [HttpPost]

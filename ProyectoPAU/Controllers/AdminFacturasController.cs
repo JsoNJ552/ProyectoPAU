@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProyectoPAU.Models;
 using ProyectoPAU.Services.UsuariosService;
 using ProyectoPAU.Services.VentasService;
 
 namespace ProyectoPAU.Controllers
 {
+    [Authorize (Roles ="Administrador")]
 	public class AdminFacturasController : Controller
 	{
 

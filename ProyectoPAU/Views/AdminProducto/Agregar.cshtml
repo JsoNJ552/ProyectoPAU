@@ -1,4 +1,4 @@
-﻿@{
+﻿﻿@{
     ViewData["Title"] = "Agregar";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
@@ -81,13 +81,30 @@
         $(document).ready(function () {
             $('#formularioProducto').submit(function (event) {
                 event.preventDefault();
-                var formData = new FormData(this);
+                // Crear objeto FormData
+                var producto = new FormData(this);
+
+                // Obtener el valor seleccionado del campo select
+                var categoriaSeleccionada = $('#categoria').val();
+
+                // Agregar el valor seleccionado al FormData
+                producto.append('IdCategoria', categoriaSeleccionada);
+
+                // Verificar si el checkbox está marcado y agregar su estado al FormData
+                var activo = document.getElementById('Activo');
+
+                if (activo == true) {
+                    producto.append('Activo', activo);
+
+                } else {
+                    producto.append('Activo', activo);
+                }
                 $.ajax({
                     url: '@Url.Action("RegistrarProducto", "AdminProducto")',
                     type: 'POST',
                     processData: false,
                     contentType: false,
-                    data: formData,
+                    data: producto,
                     success: function (response) {
                         if (response === "Producto registrado correctamente.") {
                             Swal.fire({

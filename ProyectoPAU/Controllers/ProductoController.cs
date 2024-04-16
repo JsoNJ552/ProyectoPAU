@@ -62,12 +62,12 @@ namespace ProyectoPAU.Controllers
 
 
 
-        public IActionResult ProductoDetalle(int idProducto)
+        public async Task <IActionResult> ProductoDetalle(int idProducto)
         {
             try
             {
 
-                var producto = _productService.obtenerProductosPorId(idProducto);
+                var producto = await _productService.obtenerProductosPorId(idProducto);
 
                 if (!string.IsNullOrEmpty(producto.Foto))
                 {
@@ -110,6 +110,31 @@ namespace ProyectoPAU.Controllers
                 
                 // Procesar el archivo de imagen si es necesario
                // await _productService.RegistrarProducto(model, photoFile);
+
+                return Ok("Producto registrado correctamente.");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest("Error al registrar el producto: " + ex.Message);
+            }
+        }
+
+
+        [Authorize(Roles = "Administrador")]
+        [HttpPost]
+        public async Task<IActionResult> guardarEditarProducto([FromForm] Producto producto, IFormFile photoFile)
+        {
+            try
+            {
+                if (photoFile == null || photoFile.Length == 0)
+                {
+                    return BadRequest("No se proporcionó ningún archivo.");
+                }
+
+
+
+                // Procesar el archivo de imagen si es necesario
+                // await _productService.RegistrarProducto(model, photoFile);
 
                 return Ok("Producto registrado correctamente.");
             }
