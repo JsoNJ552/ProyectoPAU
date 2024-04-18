@@ -11,7 +11,9 @@ namespace ProyectoPAU.Services.ProductoService.ProductoService
         public Task RegistrarProducto(Producto producto, IFormFile photoFile);
 
         public Task<List<Producto>> obtenerProductosAsync();
-        public Task<Producto> obtenerProductosPorId(int idProducto);
+
+        public  Task<int> obtenerCantidadProductosPorNombre(string nombre);
+		public Task<Producto> obtenerProductosPorId(int idProducto);
 
         public Task<List<Producto>> obtenerProductosPorNombreAsync(string nombre);
 

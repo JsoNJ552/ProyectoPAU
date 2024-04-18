@@ -63,12 +63,12 @@
                         <td> ₡@producto.PrecioTotal</td>
 
 
-                        <td> <a href="@Url.Action("VerDetalleFactura", "AdminFacturas", new {idVenta = producto.VentaId })" class="btn btn-sm btn-dark">Detalles</a>   </td>
+                        <td> <a href="@Url.Action("VerDetalleFactura", "AdminFacturas", new {idVenta = producto.VentaId })" class="btn  btn-dark">Detalles</a>   </td>
 
                         <td class="">
                             <form id="formEliminarProducto" method="post" action="@Url.Action("Eliminar", "AdminProducto")">
 
-                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                                <button type="submit" class="btn  btn-danger">Eliminar</button>
                             </form>
                         </td>
                     </tr>

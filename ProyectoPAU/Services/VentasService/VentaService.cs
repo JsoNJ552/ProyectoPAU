@@ -117,7 +117,22 @@ namespace ProyectoPAU.Services.VentasService
             throw new NotImplementedException();
         }
 
+        public  List<DetalleVenta> ObtenerVentasPorBusqueda(string usuario)
+        {
 
+            try
+            {
+                List <DetalleVenta> productos =  _context.DetalleVenta.Where(x => x.Producto.Nombre.Contains(usuario) || x.Venta.Usuario.Nombre.Contains(usuario) ).Include(x=>x.Venta.Usuario ).Include(x=> x.Venta) as List<DetalleVenta>;
+
+
+                return productos;
+            }
+            catch (Exception ex)
+            {
+                return null;
+            }
+      
+        }
 
         public List <Venta> ObtenerVentasPorID(int usuarioID)
         {
@@ -193,5 +208,7 @@ namespace ProyectoPAU.Services.VentasService
                 throw new Exception("Error al obtener las ventas con detalles y productos: " + ex.Message);
             }
         }
+
+        
     }
 }

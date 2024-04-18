@@ -6,7 +6,7 @@ namespace ProyectoPAU.Services.Registro
     {
 
 
-        public bool IsRegistrado(string username, string email);
+        public bool IsRegistrado( string email);
 
         Task RegistrarUsuario(Usuario usuario);
 

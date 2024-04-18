@@ -36,16 +36,27 @@
                         <div class="row">
                             <div>
                                 <label>Cantidad </label>
-                                <input id="cantidad" class="form-control" type="number" />
+                                <input id="cantidad" min="1" max="5"class="form-control" type="number" />
                                
                             </div>
                         </div>
                         <div class="bottom-content">
                             <div class="row align-items-end">
                                 <div class="col-lg-4 col-md-4 col-12">
-                                    <div class="button cart-button">
-                                        <button class="btn" id="btnAgregarAlCarrito" style="width: 100%;">Add to Cart</button>
-                                    </div>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <div class="button cart-button">
+                                            <button class="btn" id="btnAgregarAlCarrito" style="width: 100%;">Agregar a Carrito   </button>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="button cart-button">
+                                            <button class="btn  justify-content-center" onclick="window.location.href='@Url.Action("","Login")'" style="width: 100%;">Agregar a Carrito </button>
+                                        </div>
+
+                                    }
+
                                 </div>
                                 <div class="col-lg-4 col-md-4 col-12">
                                     <div class="wish-button">

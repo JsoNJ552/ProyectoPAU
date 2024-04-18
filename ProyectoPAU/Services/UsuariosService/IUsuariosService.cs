@@ -10,8 +10,10 @@ namespace ProyectoPAU.Services.UsuariosService
 
         public Task<List<Usuario>> obtenerUsuarios();
 
-        public Task<List<Rol>> obtenerRoles();
-   
+        public Task<List<Usuario>> ObtenerUsuariosPorRol(string name);
+
+        public Task<List<Usuario>> ObtenerUsuarioPorBusqueda(string name);
+
         public  Task<Usuario> obtenerUsuarioPorId(int IdUsuario);
 
         public Task<Usuario> obtenerUsuarioPorEmail(Usuario email);
@@ -23,6 +25,6 @@ namespace ProyectoPAU.Services.UsuariosService
         public Task EliminarUsuario(string email);
 
 
-
+        public Task<List<Rol>> obtenerRoles();
     }
 }

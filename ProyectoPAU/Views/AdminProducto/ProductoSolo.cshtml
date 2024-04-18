@@ -1,0 +1,66 @@
+﻿@model List<ProyectoPAU.Models.Producto>
+@{
+    ViewData["Title"] = "ProductoSolo";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+
+
+<div class="table-responsive mt-5">
+
+    <div class="position-relative">
+        <a class="justify-content-between text-decoration-none  btn  btn-light" href="@Url.Action("","AdminInventario")">
+            <i class="fas fa-sign-out-alt"></i> Volver
+
+        </a>
+        <hr />
+     
+    </div>
+
+    <table class="table table-responsive table-borderless">
+
+
+
+
+        <thead>
+            <tr class="bg-light">
+                <th scope="col" width="5%"><input class="form-check-input" type="checkbox"></th>
+                <th scope="col" width="5%">#</th>
+                <th scope="col" width="20%">Nombre</th>
+                <th scope="col" width="10%">Marca</th>
+                <th scope="col" width="20%">Precio</th>
+
+                <th scope="col" width="20%"><span>Editar</span></th>
+                <th scope="col" width="20%"><span>Eliminar</span></th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+
+            @foreach (var producto in Model)
+            {
+                <tr>
+                    <th scope="row"><input class="form-check-input" type="checkbox"></th>
+                    <td>12</td>
+                    <td>@producto.Nombre</td>
+                    <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">@producto.Marca</span></td>
+                    <td> ₡@producto.Precio</td>
+                    <td class="">
+                        <a asp-controller="AdminProducto" asp-action="Editar" asp-route-IdProducto="@producto.IdProducto" class="btn btn-sm btn-secondary mx-1"><i class="fa fa-pencil"></i> Editar</a>
+                    </td>
+                    <td class="">
+                        <form id="formEliminarProducto" method="post" action="@Url.Action("Eliminar", "AdminProducto")">
+                            @Html.Hidden("IdProducto", producto.IdProducto)
+                            <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+
+
+
+        </tbody>
+    </table>
+
+</div>

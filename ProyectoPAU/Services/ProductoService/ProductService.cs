@@ -103,7 +103,27 @@ namespace ProyectoPAU.Services.ProductoService
             }
         }
 
-        public async Task <Producto> obtenerProductosPorId(int idProducto)
+
+		public async Task<int> obtenerCantidadProductosPorNombre(string nombre)
+		{
+            try
+            {
+				int cantidad = await _context.Productos.CountAsync(x => x.IdCategoriaNavigation.Nombre == nombre);
+
+                return cantidad;
+
+
+
+            }catch(Exception ex)
+            {
+
+                return 0;
+
+            }
+		}
+
+
+		public async Task <Producto> obtenerProductosPorId(int idProducto)
         {
             try
             {
@@ -195,5 +215,7 @@ namespace ProyectoPAU.Services.ProductoService
 
             }
         }
-    }
+
+	
+	}
 }

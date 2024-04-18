@@ -12,6 +12,8 @@ namespace ProyectoPAU.Services.VentasService
 
         public List<Venta> ObtenerVentasPorID(int usuarioID);
 
+        public List<DetalleVenta> ObtenerVentasPorBusqueda(string usuario);
+
         public Task EditarVenta(Venta Venta, DetalleVenta VentaDetalle);
 
         public Task EliminarVenta(int IdVenta);

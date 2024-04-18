@@ -36,7 +36,7 @@ namespace ProyectoPAU.Controllers
                 
 
 
-                if (_registro.IsRegistrado(model.Nombre, model.Email))
+                if (_registro.IsRegistrado(model.Email))
                 {
                     return View("Index");
                 }
@@ -54,13 +54,10 @@ namespace ProyectoPAU.Controllers
 
 
             }
-
-
             return RedirectToAction("Index", "Login");
 
-
-
-
         }
+
+
     }
 }

@@ -1,8 +1,11 @@
-﻿@{
-    ViewData["Title"] = "Editar";
+﻿
+@{
+    ViewData["Title"] = "RegistrarUsuario";
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
-@model ProyectoPAU.Models.Usuario
+
+
+
 @section Estilos {
     <link rel="stylesheet" href="~/css/ProductoDetalle.css" />
 }
@@ -23,48 +26,45 @@
                             <div class="controls">
                                 <div class="form-group">
                                     <label for="precio">Nombre:</label>
-                                    <input type="hidden" class="form-control" id="IdProducto" value="@Model.UsuarioId" name="IdProducto" placeholder="Ingrese el nombre del producto">
-                                    <input type="text" class="form-control" id="nombre" value="@Model.Nombre" name="nombre" placeholder="Ingrese el nombre del producto">
+
+                                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del usuario">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="precio">Apellido:</label>
+
+                                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Ingrese el Apellido del usuario">
                                 </div>
                                 <div class="form-group">
-                                    <label for="precio">Precio:</label>
-                                    <input type="text" class="form-control" value="@Model.Email" id="email" name="email" placeholder="Ingrese el precio del producto">
+                                    <label for="precio">email:</label>
+                                    <input type="text" class="form-control" id="email" name="email" placeholder="Ingrese el email  del usuario">
                                 </div>
+                             
+
                                 <div class="form-group">
-                                    <label for="tipo">Tipo:</label>
-                                    <input type="text" class="form-control" value="@Model.Apellido" id="apellido" name="apellido" placeholder="El apellido del usuario">
+                                    <label for="tipo">Contraseña:</label>
+                                    <input type="text" class="form-control" id="Contraseña" name="Contraseña" placeholder="Ingrese la Contraseña del producto">
                                 </div>
                                 <div class="form-group">
                                     <label for="categoria">Rol:</label>
                                     <select class="form-control" id="RolId" name="RolId">
-                                        <option value="@Model.Rol.RolId">@Model.Rol.Nombre</option>
+                                       
 
                                         @foreach (var roles in ViewData["Roles"] as List<Rol>)
                                         {
                                             <option value="@roles.RolId">@roles.Nombre</option>
                                         }
-                                       
+
                                     </select>
-
-
-
-
                                 </div>
-                               
-                              
+
+
 
 
                                 <div class="form-group">
                                     <label for="Activo">Activo:</label>
                                     <select class="form-control" id="Activo" name="Activo">
-                                        @if (Model.Activo == true)
-                                        {
-                                            <option value="@Model.Activo">Activo</option>
-                                        }
-                                        else
-                                        {
-                                            <option value="@Model.Activo">Desactivado</option>
-                                        }
+                                        
 
 
                                         <option value="true">Activado</option>
@@ -80,7 +80,7 @@
 
 
 
-                             
+
 
 
                                 <div class="row mt-2">
@@ -141,7 +141,7 @@
 
                 // Realizar la llamada AJAX
                 $.ajax({
-                    url: '@Url.Action("GuardarEditarUsuario", "AdminUsuario")',
+                    url: '@Url.Action("GuardarrUsuario", "AdminUsuario")',
                     type: 'POST',
                     processData: false,
                     contentType: false,
@@ -151,16 +151,23 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: '¡Éxito!',
-                                text: 'Usuario editado correctamente.'
+                                text: 'Nuevo Creado .'
                             });
                             // Realizar cualquier acción adicional después de editar el producto
+                        } else if (response === "Email ya existente") {
+                            Swal.fire({
+                                icon: 'success',
+                                title: '¡Éxito!',
+                                text: 'Nuevo Creado .'
+                            });
+
                         }
                     },
                     error: function (xhr, status, error) {
                         Swal.fire({
                             icon: 'error',
                             title: '¡Error!',
-                            text: 'Hubo un problema al editar el usuario.' + xhr.responseText + error + status
+                            text: 'Hubo un problema al crear el usuario.' + xhr.responseText + error + status
                         });
                     }
                 });
@@ -168,5 +175,7 @@
         });
     </script>
 }
+
+
 
 

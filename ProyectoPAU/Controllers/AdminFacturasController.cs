@@ -32,6 +32,15 @@ namespace ProyectoPAU.Controllers
             return View(ventasyDetalle);
         }
 
+        public async Task<IActionResult> BusquedaProductos()
+        {
+            var ventas = await _ventasService.ObtenerTodasLasVentas();
+            var ventasyDetalle = _ventasService.ObtenerTodasDetalleVentasPorVenta(ventas);
+
+            return View(ventasyDetalle);
+        }
+
+
         public async  Task<IActionResult> VerDetalleFactura(int idVenta)
         {
             var precioFinalVenta = 0;

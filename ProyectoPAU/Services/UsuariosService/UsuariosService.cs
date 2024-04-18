@@ -54,7 +54,7 @@ namespace ProyectoPAU.Services.UsuariosService
         {
             try
             {
-                var usuarios = await _context.Usuarios.ToListAsync();
+                var usuarios = await _context.Usuarios.Include(x=>x.Rol).ToListAsync();
                 return usuarios;
 
             }catch (Exception ex) { 
@@ -137,6 +137,49 @@ namespace ProyectoPAU.Services.UsuariosService
 
 
             }
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Usuario>> ObtenerUsuariosPorRol(string name)
+        {
+
+            try
+            {
+                List<Usuario> Usuarios = await _context.Usuarios.Where(x => x.Rol.Nombre == name).Include(x=>x.Rol).ToListAsync();
+                return Usuarios;
+
+
+            }catch (Exception ex)
+            {
+
+
+            }
+            throw new NotImplementedException();
+        }
+
+        public async Task<List<Usuario>> ObtenerUsuarioPorBusqueda(string name)
+        {
+
+            try
+            {
+
+             
+
+                var UsuarioBuscar = await _context.Usuarios
+               .Where(x => x.Nombre.Contains(name) || x.Apellido.Contains(name) || x.Email.Contains(name))
+               .Include(x => x.Rol)
+               .ToListAsync();
+
+
+
+                return UsuarioBuscar;
+
+
+
+
+            }
+            catch (Exception ex)
+            { }
             throw new NotImplementedException();
         }
     }

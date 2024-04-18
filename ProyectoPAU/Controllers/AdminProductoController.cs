@@ -64,7 +64,49 @@ namespace ProyectoPAU.Controllers
         }
 
 
-     
+
+
+        [HttpGet]
+        public async Task<IActionResult> ProductoSolo(string name)
+        {
+            try
+            {
+                var userId = HttpContext.Session.GetInt32("UserId");
+                var username = HttpContext.Session.GetString("Nombre");
+
+                // Obtener todos los productos de la base de datos
+                var listaProductos = await _productoService.obtenerProductosPorNombreAsync(name);
+
+                // Iterar sobre cada producto para guardar su imagen
+                foreach (var producto in listaProductos)
+                {
+                    if (!string.IsNullOrEmpty(producto.Foto))
+                    {
+                        // Convertir la imagen de Base64 a array de bytes
+                        byte[] bytes = Convert.FromBase64String(producto.Foto);
+
+                        // Guardar la imagen en el sistema de archivos
+                        string imagePath = $"wwwroot/images/Productos/{producto.IdProducto}.png";
+                        System.IO.File.WriteAllBytes(imagePath, bytes);
+                    }
+                }
+
+                // Redirigir a la vista con la lista de productos
+                return View(listaProductos);
+            }
+            catch (Exception ex)
+            {
+                // Manejar cualquier excepción
+                // Puedes agregar lógica adicional aquí según sea necesario
+                return Content("Error: " + ex.Message);
+            }
+        }
+
+
+
+
+
+
         public async Task<IActionResult> Agregar()
         {
 
