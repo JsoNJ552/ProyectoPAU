@@ -14,10 +14,7 @@
 
     <div class="mb-2 d-flex justify-content-between align-items-center">
 
-        <div class="position-relative">
-            <span class="position-absolute search"><i class="fa fa-search"></i></span>
-            <input class="form-control w-100" placeholder="Search by order#, name...">
-        </div>
+       
 
         <div>
             <td class="position-relative">
@@ -36,16 +33,14 @@
         <table class="table table-responsive table-borderless">
 
 
-
-
+          
             <thead>
                 <tr class="bg-light">
-                    <th scope="col" width="5%"><input class="form-check-input" type="checkbox"></th>
-                    <th scope="col" width="5%">#</th>
+              
                     <th scope="col" width="20%">Nombre</th>
-                    <th scope="col" width="10%">Marca</th>
+                    <th scope="col" width="20%">Marca</th>
                     <th scope="col" width="20%">Precio</th>
-                   
+                    <th scope="col" width="20%">Activo</th>
                     <th scope="col"  width="20%"><span>Editar</span></th>
                     <th scope="col"  width="20%"><span>Eliminar</span></th>
                 </tr>
@@ -57,18 +52,27 @@
                 @foreach (var producto in Model)
                 {
                     <tr>
-                        <th scope="row"><input class="form-check-input" type="checkbox"></th>
-                        <td>12</td>
+                      
                         <td>@producto.Nombre</td>
                         <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">@producto.Marca</span></td>
                         <td> ₡@producto.Precio</td>
+                        @if(producto.Activo == true)
+                        {
+                            <td>Activo</td>
+
+                        }
+                        else
+                        {
+                            <td>Desactivado</td>
+                        }
+                        
                         <td class="">
-                            <a asp-controller="AdminProducto" asp-action="Editar" asp-route-IdProducto="@producto.IdProducto" class="btn btn-sm btn-secondary mx-1"><i class="fa fa-pencil"></i> Editar</a>
+                            <a asp-controller="AdminProducto" asp-action="Editar" asp-route-IdProducto="@producto.IdProducto" class="btn btn-sm btn-dark mx-1"><i class="fa fa-pencil"></i> Editar</a>
                         </td>
                         <td class="">
                             <form id="formEliminarProducto" method="post" action="@Url.Action("Eliminar", "AdminProducto")">
                                 @Html.Hidden("IdProducto", producto.IdProducto)
-                                <button type="submit" class="btn btn-sm btn-danger"><i class="fa fa-trash"></i> Eliminar</button>
+                                <button type="submit" class="btn btn-sm btn-danger"><i class=""></i> Eliminar</button>
                             </form>
                         </td>
                     </tr>
@@ -82,5 +86,10 @@
     </div>
 
 </div>
+
+@section Scripts{
+
+
+}
 
 

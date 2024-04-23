@@ -9,7 +9,7 @@
             <div class="card">
                 <div class="card-header">Registro de Usuario</div>
                 <div class="card-body">
-                    <form id="registroForm" enctype="multipart/form-data" asp-action="Registrar" asp-controller="Registro" method="post">
+                    <form id="registroForm" enctype="multipart/form-data" method="post">
                         <div class="form-group">
                             <label for="Nombre" class="control-label">Nombre</label>
                             <input id="Nombre" name="Nombre" class="form-control" />
@@ -46,3 +46,59 @@
         </div>
     </div>
 </div>
+@section Scripts{
+    <script>
+        const api = '@Url.Action("Registrar", "Registro")';
+        const formulario = document.getElementById('registroForm');
+
+        const sendForm = (event) => {
+            event.preventDefault();
+
+
+            const formData = new FormData(formulario);
+
+            fetch('@Url.Action("Registrar", "Registro")', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.text())
+                .then(response => {
+                    if (response == 'registrado Correctamente') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'sucess',
+                            text: response
+                        });
+                        window.location.href = "@Url.Action("Index", "Login")";
+                    } else if (response == 'usuario ya existente') {
+
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'error',
+                            text: response
+                        });
+                        formulario.reset();
+
+
+                    }
+
+
+
+                })
+                .catch(error => {
+                    console.log('Error :', error);
+
+
+                });
+
+
+
+
+        };
+
+        formulario.addEventListener('submit', sendForm);
+
+
+    </script>
+
+}

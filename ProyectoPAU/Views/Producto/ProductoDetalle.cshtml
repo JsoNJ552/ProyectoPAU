@@ -104,15 +104,14 @@
 
             botonAgregarAlCarrito.addEventListener('click', function () {
                 // Obtener la ID del producto desde el modelo de Razor
-                let productoId = '@Model.IdProducto';
-                let precioUnitario = '@Model.Precio';
+               
                 let cantidad = document.getElementById('cantidad').value;
 
                 // Crear un objeto con los datos del producto
                 const carrito = {
-                    IdProducto: productoId,
+                    IdProducto: '@Model.IdProducto',
                     Cantidad: cantidad,
-                    PrecioUnitario: precioUnitario
+                    PrecioUnitario: '@Model.Precio'
                 };
 
                 // Realizar una solicitud POST al servidor

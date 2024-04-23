@@ -163,21 +163,19 @@
                                 </h3>
                             </div>
 
-                         
                             <div class="navbar-cart">
-                                <div class="wishlist">
-                                    <a href="javascript:void(0)">
-                                        <i class="lni lni-heart"></i>
-                                        <span class="total-items">0</span>
-                                    </a>
-                                </div>
-                                
-
-
                                 <div class="cart-items">
                                     <a href="javascript:void(0)" class="main-btn">
                                         <i class="lni lni-cart"></i>
-                                        <!-- <span class="total-items">@ViewData["CantidadProductos"]</span>-->
+                                        @if (ViewData["CantidadProductos"] != null)
+                                        {
+                                             <span class="total-items">@ViewData["CantidadProductos"]</span> 
+                                        }
+                                        else
+                                        {
+                                            <span class="total-items">0</span>
+                                        }
+
                                     </a>
                                     <!-- Shopping Item -->
                                     <div class="shopping-item">
@@ -186,78 +184,53 @@
                                             <a href="cart.html">View Cart</a>
                                         </div>
                                         <ul class="shopping-list">
-
-                                            @if(ViewData["Carrito"] != null)
+                                            @if (ViewData["Carrito"] != null)
                                             {
-                                                foreach (var productos in ViewData["Carrito"] as List<CarritoDetalle>)
+                                                foreach (var producto in ViewData["Carrito"] as List<CarritoDetalle>)
                                                 {
-
-
                                                     <li>
-
-
-
-
                                                         <form id="deleteCarForm" asp-action="Eliminar" asp-controller="Carrito" method="post">
-                                                            <input type="hidden" value="@productos.Id" name="IdProducto" id="IdProducto">
+                                                            <input type="hidden" value="@producto.Id" name="IdProducto" id="IdProducto">
                                                             <a href="javascript:void(0)" class="remove" title="Remove this item">
                                                                 <button type="submit" class="lni lni-close"></button>
                                                             </a>
                                                         </form>
 
-                                                        
                                                         <div class="cart-img-head">
                                                             <a class="cart-img" href="product-details.html">
-                                                                <img src="data:image/png;base64,@productos.IdProductoNavigation.Foto" alt="#">
+                                                                <img src="data:image/png;base64,@producto.IdProductoNavigation.Foto" alt="#">
                                                             </a>
                                                         </div>
 
                                                         <div class="content">
                                                             <h4>
                                                                 <a href="product-details.html">
-                                                                    @productos.IdProductoNavigation.Nombre
+                                                                    @producto.IdProductoNavigation.Nombre
                                                                 </a>
                                                             </h4>
-                                                            <p class="quantity">@productos.Cantidad x - <span class="amount">$ @productos.PrecioUnitario</span></p>
+                                                            <p class="quantity">@producto.Cantidad x - <span class="amount">$ @producto.PrecioUnitario</span></p>
                                                         </div>
-
-
-                                                        <div class="bottom">
-                                                            <div class="total">
-                                                                <span>Total</span>
-                                                                <span class="total-amount">$</span>
-                                                            </div>
-                                                            <div class="button">
-                                                                <a href="@Url.Action("Index","CheckOut")" class="btn animate">Checkout</a>
-                                                            </div>
-                                                        </div>
-
-
-
-
                                                     </li>
-                                                    
-                                                    
-
                                                 }
-
-
-                                                
                                             }
-                                           
-                                   
                                         </ul>
-                                       
+                                        <div class="bottom">
+                                            <div class="total">
+                                                <span>Total</span>
+                                                <!-- Aquí debe ir la lógica para calcular el total -->
+                                                <span class="total-amount">$</span>
+                                            </div>
+                                            <div class="button">
+                                                <a href="@Url.Action("Index","CheckOut")" class="btn animate">Checkout</a>
+                                            </div>
+                                        </div>
                                     </div>
-
                                     <!--/ End Shopping Item -->
                                 </div>
-
-
                             </div>
                         </div>
+                    </div>
 
-                        </div>
                   </div>
                   </div>
                    

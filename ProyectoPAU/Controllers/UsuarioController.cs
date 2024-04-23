@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using ProyectoPAU.Models;
+using System.Net.Http;
+using ProyectoPAU.Services.CarService;
 
 namespace ProyectoPAU.Controllers
 {
@@ -20,13 +22,18 @@ namespace ProyectoPAU.Controllers
         private readonly ILoginService _loginService;
         private readonly TiendauContext _tiendauContext;
         private readonly Carrito _carrito;
-
-        public UsuarioController(IAutorizacionService autorizacionService, Carrito carrito, ILoginService loginService, TiendauContext tiendauContext)
+        private readonly ICarService _carService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public UsuarioController(IAutorizacionService autorizacionService,
+            IHttpContextAccessor httpContextAccessor, Carrito carrito, ILoginService loginService,
+            ICarService carService, TiendauContext tiendauContext)
         {
             _autorizacionService = autorizacionService;
             _loginService = loginService;
             _tiendauContext = tiendauContext;
             _carrito = carrito;
+            _httpContextAccessor = httpContextAccessor;
+            _carService = carService;
         }
 
         [HttpPost]
@@ -34,8 +41,22 @@ namespace ProyectoPAU.Controllers
         {
             try
             {
+                //Valida credenciales
                 var usuarioValido = await _loginService.ValidateUserAsync(usuario);
                 bool usuarioLogin = await _loginService.VerificarContraseña(usuario.password, usuarioValido.Contraseña);
+
+            
+                var carritoNullable = await _carService.BuscarAsyncCarrito((int)usuarioValido.UsuarioId);
+                //crea el carrito del usuario si este aun no tiene
+                if (usuarioValido != null && carritoNullable == null)
+                {
+                    var nuevoCarrito = new Carrito
+                    {
+                        UsuarioId = usuarioValido.UsuarioId,
+
+                    };
+                    await _carService.CrearCarrito(nuevoCarrito);
+                }
 
                 if (usuarioLogin)
                 {
@@ -74,6 +95,35 @@ namespace ProyectoPAU.Controllers
                 }
 
                 
+            }
+            catch (Exception ex)
+            {
+                // Manejo de errores
+                return StatusCode(500, "" + ex.Message);
+            }
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> VerificarPassword([FromBody] LoginUser usuario)
+        {
+            try
+            {
+                var usuarioValido = await _loginService.ValidateUserAsync(usuario);
+                bool usuarioLogin = await _loginService.VerificarContraseña(usuario.password, usuarioValido.Contraseña);
+
+                if (usuarioLogin)
+                {
+                 
+                    return Ok("Credenciales correctas");
+
+                }
+                else
+                {
+                    return BadRequest("Credenciales Incorrectas");
+                }
+
+
             }
             catch (Exception ex)
             {

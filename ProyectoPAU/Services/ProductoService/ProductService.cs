@@ -216,6 +216,27 @@ namespace ProyectoPAU.Services.ProductoService
             }
         }
 
-	
-	}
+        public async Task<List<Producto>> ObtenerTodosProductosPorNombre(string name)
+        {
+
+
+            try
+            {
+
+                var productos = await   _context.Productos.Where(x => x.Nombre == name || x.Marca == name).ToListAsync();
+                return productos;
+
+
+
+
+            }
+            catch (Exception ex)
+            { 
+
+                Console.WriteLine(ex.Message);
+            
+            }
+            throw new NotImplementedException();
+        }
+    }
 }

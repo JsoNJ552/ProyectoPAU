@@ -13,16 +13,6 @@
 
 
 
-        <div class="position-relative">
-            <span class="position-absolute search"><i class="fa fa-search"></i></span>
-            <input class="form-control w-100" placeholder="Search by order#, name...">
-        </div>
-
-        <div class="px-2">
-
-            <span>Filters <i class="fa fa-angle-down"></i></span>
-            <i class="fa fa-ellipsis-h ms-3"></i>
-        </div>
 
     </div>
     <div class="table-responsive">
@@ -30,7 +20,7 @@
 
             <thead>
                 <tr class="bg-light">
-                    <th scope="col" width="5%"><input class="form-check-input" type="checkbox"></th>
+                
 
                     <th scope="col" width="20%">Producto</th>
                     <th scope="col" width="20%">Fecha</th>
@@ -42,11 +32,11 @@
                 @foreach (var detalleVenta in Model)
                 {
                     <tr>
-                        <th scope="row"><input class="form-check-input" type="checkbox"></th>
+                     
                         <td>@detalleVenta.Producto.Nombre</td>
                         <td>@detalleVenta.Venta.Fecha</td>
                         <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">@detalleVenta.TipoPago</span></td>
-                        <td> <a href="@Url.Action("FacturaDetalle", "Perfil", new { idVenta = detalleVenta.VentaId })" class="btn btn-warning">Check offer</a>   </td>
+                        <td> <a href="@Url.Action("FacturaDetalle", "Perfil", new { Venta = detalleVenta.VentaId })" class="btn btn-warning">Check offer</a>   </td>
 
 
                     </tr>

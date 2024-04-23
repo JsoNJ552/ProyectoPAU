@@ -69,7 +69,7 @@ namespace ProyectoPAU.Controllers
             return View();
         }
 
-        public async Task<IActionResult> FacturaDetalle(int idVenta)
+        public async Task<IActionResult> FacturaDetalle(int Venta)
         {
 
             try
@@ -78,7 +78,7 @@ namespace ProyectoPAU.Controllers
                 int? usuarioIDNullable = httpContext.Session.GetInt32("idUsuario");
 
                 var facturas = _ventasService.ObtenerVentasPorID((int)usuarioIDNullable);
-                var VentaDetallesPrimera = await _ventasService.ObtenerDetalleVentasPorIdVenta(idVenta);
+                var VentaDetallesPrimera = await _ventasService.ObtenerDetalleVentasPorIdVenta(Venta);
 
                 foreach (var pr in facturas)
                 {
@@ -258,11 +258,8 @@ namespace ProyectoPAU.Controllers
 
                 Usuario usuario = await _usuariosService.obtenerUsuarioPorId((int)usuarioIDNullable);
                 Console.Write("CONTRAA"+" "+usuario.Contraseña);
-                usuario.Contraseña = password.Contraseña;
-
-
-
-
+                string HashPassword = BCrypt.Net.BCrypt.HashPassword(password.Contraseña);
+                usuario.Contraseña = HashPassword;
 
                 await _usuariosService.EditarUsuario(usuario);
 
@@ -276,17 +273,7 @@ namespace ProyectoPAU.Controllers
             }
 
 
-
-
-
-          
-
         }
-
-
-
-
-
 
 
     }

@@ -40,7 +40,7 @@ namespace ProyectoPAU.Controllers
         {
             try
             {
-                //SECTION CARRITO
+                //SECTION CARRITO CREA EL CARRITO
                 var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
                 //Crea el carrito automaticamente a un usuario recien registrado
                 

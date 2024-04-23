@@ -34,11 +34,9 @@ namespace ProyectoPAU.Controllers
             try
             {
                 
-
-
                 if (_registro.IsRegistrado(model.Email))
                 {
-                    return View("Index");
+                    return Ok("usuario ya existente");
                 }
 
                 model.RolId = 2;
@@ -46,7 +44,7 @@ namespace ProyectoPAU.Controllers
                 await _registro.RegistrarUsuario(model);
 
 
-                return RedirectToAction("Index", "Login");
+                return Ok("registrado Correctamente");
 
             }
             catch (Exception ex)
@@ -54,7 +52,7 @@ namespace ProyectoPAU.Controllers
 
 
             }
-            return RedirectToAction("Index", "Login");
+            return BadRequest();
 
         }
 

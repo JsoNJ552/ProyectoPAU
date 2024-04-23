@@ -4,6 +4,7 @@ using ProyectoPAU.Models;
 using ProyectoPAU.Services.CategoriasService;
 using ProyectoPAU.Services.ProductoService;
 using ProyectoPAU.Services.ProductoService.ProductoService;
+using ProyectoPAU.Services.ProductosInicioService;
 
 namespace ProyectoPAU.Controllers
 {
@@ -16,12 +17,14 @@ namespace ProyectoPAU.Controllers
         private readonly IProductService _productoService;
         private readonly ICategoriasService _categoriasService;
         private readonly Producto _producto;
+        private readonly IProductosInicioService _productosInicioService; 
 
-        public AdminProductoController(TiendauContext context, IProductService productService, ICategoriasService categoriaService)
+        public AdminProductoController(TiendauContext context, IProductosInicioService productosInicioService, IProductService productService, ICategoriasService categoriaService)
         {
             _context = context;
             _productoService = productService;
             _categoriasService = categoriaService;
+            _productosInicioService = productosInicioService;
             
             
 
@@ -36,7 +39,7 @@ namespace ProyectoPAU.Controllers
                 var username = HttpContext.Session.GetString("Nombre");
 
                 // Obtener todos los productos de la base de datos
-                var listaProductos = await _productoService.obtenerProductosAsync();
+                var listaProductos = await _productosInicioService.getProductosAcAndInac();
 
                 // Iterar sobre cada producto para guardar su imagen
                 foreach (var producto in listaProductos)
@@ -75,7 +78,7 @@ namespace ProyectoPAU.Controllers
                 var username = HttpContext.Session.GetString("Nombre");
 
                 // Obtener todos los productos de la base de datos
-                var listaProductos = await _productoService.obtenerProductosPorNombreAsync(name);
+                var listaProductos = await _productosInicioService.obtenerTodosProductosPorNombreAsync(name);
 
                 // Iterar sobre cada producto para guardar su imagen
                 foreach (var producto in listaProductos)

@@ -62,12 +62,12 @@ namespace ProyectoPAU.Controllers
 
 
 
-        public async Task <IActionResult> ProductoDetalle(int idProducto)
+        public async Task <IActionResult> ProductoDetalle(int Venta)
         {
             try
             {
 
-                var producto = await _productService.obtenerProductosPorId(idProducto);
+                var producto = await _productService.obtenerProductosPorId(Venta);
 
                 if (!string.IsNullOrEmpty(producto.Foto))
                 {

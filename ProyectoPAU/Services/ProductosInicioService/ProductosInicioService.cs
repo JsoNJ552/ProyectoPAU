@@ -15,33 +15,10 @@ namespace ProyectoPAU.Services.ProductosInicioService
         }
 
 
-        public async Task <List<Producto>> getProductosCategoriaCelular()
-        {
-            try
-            {
-              
-                List <Producto>celulares  = await _context.Productos.Where(x => x.IdCategoriaNavigation.Nombre == "Celulares").ToListAsync();
-                return celulares;
+  
 
-            }catch (Exception ex) { }
-
-            return null;
-        }
-
-        public async Task<List<Producto>> getProductosCategoriaComputadora()
-        {
-            try
-            {
-
-                List<Producto> celulares = await _context.Productos.Where(x => x.IdCategoriaNavigation.Nombre == "Computadoras").ToListAsync();
-                return celulares;
-
-            }
-            catch (Exception ex) { }
-
-            return null;
-        }
-        [HttpGet]
+       
+     
         public async  Task<List<Producto>> getProductosCategoria(string categoria)
         {
             try
@@ -54,32 +31,41 @@ namespace ProyectoPAU.Services.ProductosInicioService
             }
         }
 
-        public async  Task<List<Producto>> getProductosCategoriaRelojes()
+
+        public async Task<List<Producto>> obtenerTodosProductosPorNombreAsync(string nombre)
         {
             try
             {
+                // Consulta todos los productos cuyo nombre, marca o pertenezcan a una categoría contenga la cadena especificada
+                var productos = await _context.Productos
+                    .Where(p => p.Nombre.Contains(nombre) || p.Marca.Contains(nombre)  ||
+                                p.IdCategoriaNavigation.Nombre.Contains(nombre) )
+                    .ToListAsync();
 
-                List<Producto> celulares = await _context.Productos.Where(x => x.IdCategoriaNavigation.Nombre == "Relojes").ToListAsync();
-                return celulares;
-
+                return productos;
             }
-            catch (Exception ex) { }
-
-            return null;
+            catch (Exception ex)
+            {
+                // Manejo de excepciones si es necesario
+                throw new Exception("Ocurrió un error al obtener los productos.", ex);
+            }
         }
 
-        public async Task<List<Producto>> getProductosCategoriaTelevision()
+
+        public async Task<List<Producto>> getProductosAcAndInac( )
         {
             try
             {
-
-                List<Producto> celulares = await _context.Productos.Where(x => x.IdCategoriaNavigation.Nombre == "Television").ToListAsync();
-                return celulares;
-
+                var producto = await _context.Productos.ToListAsync();
+                return producto;
             }
-            catch (Exception ex) { }
+            catch (Exception ex)
+            {
 
-            return null;
+                return null;
+            }
         }
+
+
     }
 }

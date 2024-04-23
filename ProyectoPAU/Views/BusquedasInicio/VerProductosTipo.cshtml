@@ -44,13 +44,13 @@
                             @if(producto.Cantidad == 0)
                             {
                                 <div class="text-center my-4">
-                                    <a href="@Url.Action("ProductoDetalle", "Producto", new { idProducto = producto.IdProducto })" class="btn btn-warning">Fuera de Stock</a>
+                                        <a href="@Url.Action("ProductoDetalle", "Producto", new { Venta = producto.IdProducto })" class="btn btn-warning">Fuera de Stock</a>
                                 </div>
                             }
                             else
                             {
                                 <div class="text-center my-4">
-                                    <a href="@Url.Action("ProductoDetalle", "Producto", new { idProducto = producto.IdProducto })" class="btn btn-warning">Ver oferta </a>
+                                        <a href="@Url.Action("ProductoDetalle", "Producto", new { Venta = producto.IdProducto })" class="btn btn-warning">Ver oferta </a>
                                 </div>
                             }
 

@@ -12,6 +12,8 @@ namespace ProyectoPAU.Services.ProductoService.ProductoService
 
         public Task<List<Producto>> obtenerProductosAsync();
 
+        public Task<List<Producto>> ObtenerTodosProductosPorNombre(string name);
+
         public  Task<int> obtenerCantidadProductosPorNombre(string nombre);
 		public Task<Producto> obtenerProductosPorId(int idProducto);
 
