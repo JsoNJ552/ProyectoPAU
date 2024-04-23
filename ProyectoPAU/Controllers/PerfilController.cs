@@ -50,11 +50,9 @@ namespace ProyectoPAU.Controllers
 
                 var facturas = _ventasService.ObtenerVentasPorID((int)usuarioIDNullable);
                 var VentaDetallesPrimera = _ventasService.ObtenerDetalleVentasPorUsuarioId(facturas);
+            
 
-                foreach (var pr in facturas)
-                {
-                    Console.WriteLine(pr.IdVenta + "VentaID");
-                }
+
 
                 return View(VentaDetallesPrimera);
 
@@ -80,10 +78,15 @@ namespace ProyectoPAU.Controllers
                 var facturas = _ventasService.ObtenerVentasPorID((int)usuarioIDNullable);
                 var VentaDetallesPrimera = await _ventasService.ObtenerDetalleVentasPorIdVenta(Venta);
 
-                foreach (var pr in facturas)
+                var precioFinalVenta = 0;
+
+                foreach (var precioTotal in VentaDetallesPrimera)
                 {
-                    Console.WriteLine(pr.IdVenta + "VentaID");
+                    precioFinalVenta = precioFinalVenta + (int)precioTotal.PrecioTotal;
+
                 }
+
+                ViewData["PrecioFinal"] = precioFinalVenta;
 
                 return View(VentaDetallesPrimera);
 

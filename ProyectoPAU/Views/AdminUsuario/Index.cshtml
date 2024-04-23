@@ -4,126 +4,71 @@
     Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
 }
 
-
 @section Estilos {
 
 }
 
 <div class="container mt-5 px-2">
-
     <div class="mb-2 d-flex justify-content-between align-items-center">
-
         <div class="position-relative">
-            <a class="justify-content-between text-decoration-none  btn btn-lg" href="@Url.Action("","AdminUsuario")">Todos</a>
+            <a class="justify-content-between text-decoration-none btn btn-lg" href="@Url.Action("","AdminUsuario")">Todos</a>
             <a class="justify-content-between text-decoration-none btn btn-lg" asp-controller="AdminUsuario" asp-action="VistaUsuarioRol" asp-route-Name="Administrador">Empleados</a>
-
             <a class="justify-content-between text-decoration-none btn btn-lg" asp-controller="AdminUsuario" asp-action="VistaUsuarioRol" asp-route-Name="Usuario Regular">Usuarios</a>
-
         </div>
-
-
-
-
-      
-
         <div>
-            <td class="position-relative">
-                <button type="button" class="btn btn-sm btn-light"><a href="@Url.Action("RegistrarUsuario","AdminUsuario")" class="fa fa-trash">Agregar</a> </button>
-            </td>
-
+            <button type="button" class="btn btn-sm btn-light"><a href="@Url.Action("RegistrarUsuario","AdminUsuario")" class="fa fa-trash">Agregar</a></button>
         </div>
-
-
-       
-
-
-
-
-
-
     </div>
     <div class="table-responsive">
         <table class="table table-responsive table-borderless">
-
-            <div class="d-flex align-items-center">
-                <div class="position-relative flex-grow-1">
-                    <span class="position-absolute search "><i class="fa fa-search"></i></span>
-                    <input class="form-control w-50" placeholder="Search by order#, name...">
+            <form id="formBusqueda" action="@Url.Action("BuscarUsuario","AdminUsuario")" method="get">
+                <div class="d-flex align-items-center">
+                    <div class="position-relative flex-grow-1">
+                        <input id="palabra" name="palabra" class="form-control w-50" placeholder="Search by order#, name...">
+                    </div>
+                    <button class="btn btn-outline-dark search-btn" type="submit">Buscar</button>
                 </div>
-                <button class="btn  btn-outline-dark search-btn " type="submit">Buscar</button>
-            </div>
+            </form>
             <hr />
-
-         
-
-               
-
             <thead>
                 <tr class="bg-light">
-                  
                     <th scope="col" width="20%">Nombre</th>
                     <th scope="col" width="20%">Apellido</th>
                     <th scope="col" width="20%">email</th>
                     <th scope="col" width="20%">Rol</th>
-
                     <th scope="col" width="20%"><span>Editar</span></th>
-                    <th scope="col" width="20%"><span>Desactivar </span></th>
-
-                    <th scope="col" width="20%"><span>Estado </span></th>
+                    <th scope="col" width="20%"><span>Desactivar</span></th>
+                    <th scope="col" width="20%"><span>Estado</span></th>
                 </tr>
             </thead>
             <tbody>
-
-
-
                 @foreach (var usuario in Model)
                 {
                     <tr>
-                        
                         <td>@usuario.Nombre</td>
                         <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">@usuario.Apellido</span></td>
-                        <td> @usuario.Email</td>
-                        <td> @usuario.Rol.Nombre</td>
+                        <td>@usuario.Email</td>
+                        <td>@usuario.Rol.Nombre</td>
                         <td class="">
-                            <a  asp-controller="AdminUsuario" asp-action="EditarUsuario" asp-route-Email="@usuario.Email" class="btn btn-secondary mx-1"> Editar</a>
+                            <a asp-controller="AdminUsuario" asp-action="EditarUsuario" asp-route-Email="@usuario.Email" class="btn btn-secondary mx-1">Editar</a>
                         </td>
                         <td class="">
-                            <form id="formEliminarUsuario" method="get" action="@Url.Action("DesactivarUsuario", "AdminUsuario")">
+                            <form id="formEliminarUsuario" method="post" action="@Url.Action("DesactivarUsuario", "AdminUsuario")">
                                 @Html.Hidden("email", usuario.Email)
-                                <button type="submit" class="btn  btn-danger"> Desactivar</button>
+                                <button type="submit" class="btn btn-danger">Desactivar</button>
                             </form>
                         </td>
-
-                        @if (usuario.Activo == false )
+                        @if (usuario.Activo == true)
                         {
-                            <td> Desactivado</td>
+                            <td>Desactivado</td>
                         }
                         else
                         {
                             <td>Activado</td>
                         }
-                     
                     </tr>
                 }
-
-
-
             </tbody>
         </table>
-
     </div>
-
 </div>
-
-@section Scripts{
-
-    <script>
-
-
-
-    </script>
-}
-
-
-
-

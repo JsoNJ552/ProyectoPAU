@@ -29,8 +29,15 @@ namespace ProyectoPAU.Controllers
         }
         public IActionResult Index()
         {
+            int precioTotal = 0;
             var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
+
+            foreach(var pr in carritoDetalle)
+            {
+                precioTotal += (int)pr.PrecioTotal;
+            }
             ViewData["Carrito"] = carritoDetalle;
+            ViewData["PrecioFinal"] = precioTotal;
             return View();
         }
 

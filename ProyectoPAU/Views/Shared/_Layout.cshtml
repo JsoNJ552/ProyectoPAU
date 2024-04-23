@@ -50,9 +50,8 @@
 
                             <ul class="useful-links">
                   
-                                <li><a href="about-us.html">Contactanos</a></li>
                                 <li><a href="@Url.Action("Index","Home")">Inicio</a></li>
-                                <li><a href="about-us.html">Sobre nosotros</a></li>
+                                <li><a href="@Url.Action("AboutUs","Home")">Sobre nosotros</a></li>
                             
                             </ul>
                         </div>
@@ -221,7 +220,20 @@
                                                 <span class="total-amount">$</span>
                                             </div>
                                             <div class="button">
-                                                <a href="@Url.Action("Index","CheckOut")" class="btn animate">Checkout</a>
+                                                @if (!User.Identity.IsAuthenticated)
+                                                {
+                                                    <a href="@Url.Action("Index","Login")" class="btn animate">Checkout</a>
+                                                }
+                                                @if(ViewData["CantidadProductos"] == null)
+                                                {
+                                                    <a href="@Url.Action("Index","Home")" class="btn animate">Checkout</a>
+                                                }
+                                                else
+                                                {
+                                                    <a href="@Url.Action("Index","CheckOut")" class="btn animate">Checkout</a>
+                                                    
+                                                }
+
                                             </div>
                                         </div>
                                     </div>

@@ -80,10 +80,6 @@ namespace ProyectoPAU.Controllers
 
                */
 
-
-
-
-
                 
                 ViewData["Carrito"] = carritoDetalle;
 
@@ -124,6 +120,12 @@ namespace ProyectoPAU.Controllers
             }
         }
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+
+        public IActionResult AboutUs()
         {
             return View();
         }

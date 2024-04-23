@@ -219,6 +219,35 @@ namespace ProyectoPAU.Controllers
 
 
 
+        [HttpGet]
+        public async Task<IActionResult> BuscarUsuario(string palabra)
+        {
+
+
+            try
+            {
+               
+
+
+                var usuarioEditar = await _usuariosService.ObtenerUsuarioPorBusqueda(palabra);
+
+                Console.WriteLine("EMAIL A DESACTIVAR" + palabra);
+
+                return View("Index",usuarioEditar);
+
+
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            return View();
+
+        }
+
+
+
 
     }
 }

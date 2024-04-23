@@ -11,10 +11,19 @@
 
 
 
+        <div class="position-relative">
+            <a class="justify-content-between text-decoration-none  btn  btn-light" href="@Url.Action("","Perfil")">
+                <i class="fas fa-sign-out-alt"></i> Volver
 
+            </a>
+           
+
+        </div>
 
 
     </div>
+
+    <hr />
     <div class="table-responsive">
         <table class="table table-responsive table-borderless">
 
@@ -25,7 +34,9 @@
                     <th scope="col" width="20%">Producto</th>
                     <th scope="col" width="20%">Fecha</th>
                     <th scope="col" width="20%">TipoPago</th>
-                    <th scope="col" width="20%">Accion</th>
+                    <th scope="col" width="20%">Precio Unitario</th>
+                    <th scope="col" width="20%">Precio Total</th>
+                 
                 </tr>
             </thead>
             <tbody>
@@ -35,17 +46,27 @@
                      
                         <td>@detalleVenta.Producto.Nombre</td>
                         <td>@detalleVenta.Venta.Fecha</td>
-                        <td><i class="fa fa-check-circle-o green"></i><span class="ms-1">@detalleVenta.TipoPago</span></td>
-                        <td> <a href="@Url.Action("FacturaDetalle", "Perfil", new { Venta = detalleVenta.VentaId })" class="btn btn-warning">Check offer</a>   </td>
-
+                        <td>@detalleVenta.TipoPago</td>
+                        <td>@detalleVenta.Producto.Precio</td>
+                        <td>@detalleVenta.PrecioTotal</td>
+                       
 
                     </tr>
 
                 }
 
+               
+
 
             </tbody>
         </table>
+
+        <div>
+            <i>Total de Compra</i>
+            <input readonly value="₡ @ViewData["PrecioFinal"]" class="form-control border-0" />
+            <hr />
+
+        </div>
 
     </div>
 
