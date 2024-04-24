@@ -6,7 +6,7 @@ using ProyectoPAU.Services.ProductoService.ProductoService;
 
 namespace ProyectoPAU.Controllers
 {
-	[Authorize(Roles = "Administrador")]
+	[Authorize(Roles = "Administrador,Empleado")]
     public class AdminInventarioController : Controller
     {
 

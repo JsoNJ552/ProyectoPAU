@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+ï»¿using Microsoft.EntityFrameworkCore;
 using ProyectoPAU;
 using System.Configuration;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +17,7 @@ using ProyectoPAU.Services.CarService;
 using ProyectoPAU.Services.VentasService;
 using ProyectoPAU.Services.UsuariosService;
 using ProyectoPAU.Services.ProductosInicioService;
+using ProyectoPAU.Controllers;
 internal class Program
 {
     private static void Main(string[] args)
@@ -64,9 +65,9 @@ internal class Program
 
         builder.Services.AddSession(options =>
         {
-            options.Cookie.Name = "MySessionCookie"; // Nombre de la cookie de sesión
-            options.IdleTimeout = TimeSpan.FromMinutes(20); // Tiempo de espera de inactividad de la sesión
-            options.Cookie.HttpOnly = true; // Solo accesible a través de HTTP
+            options.Cookie.Name = "MySessionCookie"; // Nombre de la cookie de sesiï¿½n
+            options.IdleTimeout = TimeSpan.FromMinutes(20); // Tiempo de espera de inactividad de la sesiï¿½n
+            options.Cookie.HttpOnly = true; // Solo accesible a travï¿½s de HTTP
             options.Cookie.IsEssential = true; // Marca la cookie como esencial
         });
 
@@ -75,6 +76,10 @@ internal class Program
         {
             options.Filters.Add(typeof(CarritoActionFilter));
         });
+
+                    builder.Services.AddEndpointsApiExplorer();
+
+                    builder.Services.AddSwaggerGen();
 
 
 
@@ -91,6 +96,12 @@ internal class Program
             app.UseHsts();
         }
 
+                    if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+};
+
 
 
 
@@ -99,7 +110,7 @@ internal class Program
 
         app.UseRouting();
 
-        // Agregar el middleware de sesión
+        // Agregar el middleware de sesiï¿½n
         app.UseSession();
 
         app.UseAuthentication();
@@ -110,6 +121,8 @@ internal class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                   
 
         app.Run();
     }

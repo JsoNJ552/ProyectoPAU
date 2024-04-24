@@ -8,12 +8,15 @@ namespace CRUDCategoria.Controllers
     [Route("[controller]")]
     public class CategoriaController : ControllerBase
     {
+       
+        
         private static List<Categoria> _categorias = new List<Categoria>();
 
         // GET /categoria
         [HttpGet]
         public IEnumerable<Categoria> Get()
         {
+            
             return _categorias;
         }
 

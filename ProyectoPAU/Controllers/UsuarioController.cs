@@ -13,6 +13,7 @@ using System.Security.Claims;
 using ProyectoPAU.Models;
 using System.Net.Http;
 using ProyectoPAU.Services.CarService;
+using ProyectoPAU.Services.UsuariosService;
 
 namespace ProyectoPAU.Controllers
 {
@@ -24,9 +25,10 @@ namespace ProyectoPAU.Controllers
         private readonly Carrito _carrito;
         private readonly ICarService _carService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUsuariosService _usuarioService;
         public UsuarioController(IAutorizacionService autorizacionService,
             IHttpContextAccessor httpContextAccessor, Carrito carrito, ILoginService loginService,
-            ICarService carService, TiendauContext tiendauContext)
+            ICarService carService, TiendauContext tiendauContext, IUsuariosService usuarioService)
         {
             _autorizacionService = autorizacionService;
             _loginService = loginService;
@@ -34,6 +36,7 @@ namespace ProyectoPAU.Controllers
             _carrito = carrito;
             _httpContextAccessor = httpContextAccessor;
             _carService = carService;
+            _usuarioService = usuarioService;
         }
 
         [HttpPost]
@@ -60,6 +63,13 @@ namespace ProyectoPAU.Controllers
 
                 if (usuarioLogin)
                 {
+                    DateTime fechaActual = DateTime.Now;
+                    string fechaComoString = fechaActual.ToString("yyyy-MM-dd HH:mm:ss");
+                    usuarioValido.FechaConexion = fechaComoString;
+                    await _usuarioService.EditarUsuario(usuarioValido);
+
+
+
                     var claims = new List<Claim>
                     {
                     new Claim(ClaimTypes.Name, usuarioValido.Nombre),

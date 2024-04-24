@@ -8,7 +8,7 @@ using ProyectoPAU.Services.ProductosInicioService;
 
 namespace ProyectoPAU.Controllers
 {
-    [Authorize(Roles ="Administrador")]
+    [Authorize(Roles ="Administrador,Empleado")]
     public class AdminProductoController : Controller
     {
 

@@ -40,10 +40,8 @@ public partial class TiendauContext : DbContext
     public virtual DbSet<Venta> Venta { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-
-    }
-
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
+        => optionsBuilder.UseSqlServer("Server=JIM3N3Z; DataBase=TIENDAU; Trusted_Connection=True; TrustServerCertificate=True;");
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -96,7 +94,7 @@ public partial class TiendauContext : DbContext
 
         modelBuilder.Entity<DetalleVenta>(entity =>
         {
-            entity.HasKey(e => e.IdDetalleVenta).HasName("PK__DetalleV__0157010ABFA1B780");
+            entity.HasKey(e => e.IdDetalleVenta).HasName("PK__DetalleV__0157010A2E82DCD2");
 
             entity.Property(e => e.IdDetalleVenta).HasColumnName("ID_DetalleVenta");
             entity.Property(e => e.ApellidoJuridico)
@@ -119,11 +117,11 @@ public partial class TiendauContext : DbContext
 
             entity.HasOne(d => d.Producto).WithMany(p => p.DetalleVenta)
                 .HasForeignKey(d => d.ProductoId)
-                .HasConstraintName("FK__DetalleVe__Produ__1A9EF37A");
+                .HasConstraintName("FK__DetalleVe__Produ__2CBDA3B5");
 
             entity.HasOne(d => d.Venta).WithMany(p => p.DetalleVenta)
                 .HasForeignKey(d => d.VentaId)
-                .HasConstraintName("FK__DetalleVe__Venta__19AACF41");
+                .HasConstraintName("FK__DetalleVe__Venta__2BC97F7C");
         });
 
         modelBuilder.Entity<ErroresDePrograma>(entity =>
@@ -258,6 +256,9 @@ public partial class TiendauContext : DbContext
             entity.Property(e => e.Apellido).HasMaxLength(50);
             entity.Property(e => e.Contraseña).HasMaxLength(100);
             entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.FechaConexion)
+                .HasMaxLength(100)
+                .IsUnicode(false);
             entity.Property(e => e.Nombre).HasMaxLength(50);
             entity.Property(e => e.RolId).HasColumnName("RolID");
 
@@ -268,7 +269,7 @@ public partial class TiendauContext : DbContext
 
         modelBuilder.Entity<Venta>(entity =>
         {
-            entity.HasKey(e => e.IdVenta).HasName("PK__Venta__3CD842E5F7329206");
+            entity.HasKey(e => e.IdVenta).HasName("PK__Venta__3CD842E5DA4128B1");
 
             entity.Property(e => e.IdVenta).HasColumnName("ID_Venta");
             entity.Property(e => e.Fecha).HasColumnName("fecha");
@@ -277,11 +278,11 @@ public partial class TiendauContext : DbContext
 
             entity.HasOne(d => d.Tienda).WithMany(p => p.Venta)
                 .HasForeignKey(d => d.TiendaId)
-                .HasConstraintName("FK__Venta__tienda_id__15DA3E5D");
+                .HasConstraintName("FK__Venta__tienda_id__27F8EE98");
 
             entity.HasOne(d => d.Usuario).WithMany(p => p.Venta)
                 .HasForeignKey(d => d.UsuarioId)
-                .HasConstraintName("FK__Venta__usuario_I__16CE6296");
+                .HasConstraintName("FK__Venta__usuario_I__28ED12D1");
         });
 
         OnModelCreatingPartial(modelBuilder);

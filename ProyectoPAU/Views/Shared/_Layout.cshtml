@@ -75,16 +75,22 @@
                                 }
 
                                 @{
-                                    var isAdmin = User.IsInRole("Administrador");
+                                    var isAuthenticated = User.Identity.IsAuthenticated;
+                                    var isAdminOrEmployee = User.IsInRole("Admin") || User.IsInRole("Empleado");
                                 }
-                                @if (User.Identity.IsAuthenticated && isAdmin)
+
+                                @if (isAuthenticated && isAdminOrEmployee)
                                 {
+                                   
+                            
+
                                     
 
                                     <li>
                                         <a href="@Url.Action("Index","AdminProducto")">(ADMIN)</a>
                                     </li>
-                                }@if (User.Identity.IsAuthenticated)
+                                }
+                                @if (User.Identity.IsAuthenticated)
                                 {
                                     <div class="user">
                                         <i class="lni lni-user"></i>
@@ -179,7 +185,7 @@
                                     <!-- Shopping Item -->
                                     <div class="shopping-item">
                                         <div class="dropdown-cart-header">
-                                            <span>2 Items</span>
+                                        
                                             <a href="cart.html">View Cart</a>
                                         </div>
                                         <ul class="shopping-list">
@@ -220,19 +226,12 @@
                                                 <span class="total-amount">$</span>
                                             </div>
                                             <div class="button">
-                                                @if (!User.Identity.IsAuthenticated)
+                                                @if (!User.Identity.IsAuthenticated || ViewData["CantidadProductos"] == null)
                                                 {
                                                     <a href="@Url.Action("Index","Login")" class="btn animate">Checkout</a>
                                                 }
-                                                @if(ViewData["CantidadProductos"] == null)
-                                                {
-                                                    <a href="@Url.Action("Index","Home")" class="btn animate">Checkout</a>
-                                                }
-                                                else
-                                                {
-                                                    <a href="@Url.Action("Index","CheckOut")" class="btn animate">Checkout</a>
-                                                    
-                                                }
+                                                
+                                               
 
                                             </div>
                                         </div>

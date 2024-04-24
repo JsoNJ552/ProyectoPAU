@@ -19,6 +19,8 @@ public partial class Usuario
 
     public bool? Activo { get; set; }
 
+    public string FechaConexion { get; set; }
+
     public virtual ICollection<Carrito> Carritos { get; set; } = new List<Carrito>();
 
     public virtual ICollection<HistorialRefreshToken> HistorialRefreshTokens { get; set; } = new List<HistorialRefreshToken>();
