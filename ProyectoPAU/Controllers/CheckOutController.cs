@@ -99,6 +99,10 @@ namespace ProyectoPAU.Controllers
                 // Llamar al método RegistrarVenta para procesar la venta con todos los detalles
                 await _ventaServices.RegistrarVenta(venta, detallesVenta);
 
+
+
+                //SEGUNDA PARTE CHECKOUT lIMPIA EL CARRITO
+
                 var carritoNullable = await _carService.BuscarAsyncCarrito((int)usuarioIDNullable);
 
 

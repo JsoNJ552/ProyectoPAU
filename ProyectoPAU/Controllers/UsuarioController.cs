@@ -63,6 +63,7 @@ namespace ProyectoPAU.Controllers
 
                 if (usuarioLogin)
                 {
+                    //Registra la ultima fecha de conexion
                     DateTime fechaActual = DateTime.Now;
                     string fechaComoString = fechaActual.ToString("yyyy-MM-dd HH:mm:ss");
                     usuarioValido.FechaConexion = fechaComoString;

@@ -76,7 +76,7 @@
 
                                 @{
                                     var isAuthenticated = User.Identity.IsAuthenticated;
-                                    var isAdminOrEmployee = User.IsInRole("Admin") || User.IsInRole("Empleado");
+                                    var isAdminOrEmployee = User.IsInRole("Administrador") || User.IsInRole("Empleado");
                                 }
 
                                 @if (isAuthenticated && isAdminOrEmployee)
@@ -229,6 +229,8 @@
                                                 @if (!User.Identity.IsAuthenticated || ViewData["CantidadProductos"] == null)
                                                 {
                                                     <a href="@Url.Action("Index","Login")" class="btn animate">Checkout</a>
+                                                }else{
+                                                    <a href="@Url.Action("Index","CheckOut")" class="btn animate">Checkout</a>
                                                 }
                                                 
                                                

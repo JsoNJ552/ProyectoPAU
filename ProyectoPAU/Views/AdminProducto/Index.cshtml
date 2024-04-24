@@ -18,7 +18,7 @@
 
         <div>
             <td class="position-relative">
-                <button type="button" class="btn btn-sm btn-light"><a href="@Url.Action("Agregar","AdminProducto")" class="fa fa-trash">Agregar</a> </button>
+                <button type="button" class="btn btn-sm btn-light"><a href="@Url.Action("Agregar","AdminProducto")" >Agregar</a> </button>
             </td>
     
         </div>
@@ -40,7 +40,7 @@
                     <th scope="col" width="20%">Nombre</th>
                     <th scope="col" width="20%">Marca</th>
                     <th scope="col" width="20%">Precio</th>
-                    <th scope="col" width="20%">Activo</th>
+                    <th scope="col" width="20%">Estado</th>
                     <th scope="col"  width="20%"><span>Editar</span></th>
                     <th scope="col"  width="20%"><span>Eliminar</span></th>
                 </tr>
@@ -67,12 +67,12 @@
                         }
                         
                         <td class="">
-                            <a asp-controller="AdminProducto" asp-action="Editar" asp-route-IdProducto="@producto.IdProducto" class="btn btn-sm btn-dark mx-1"><i class="fa fa-pencil"></i> Editar</a>
+                            <a asp-controller="AdminProducto" asp-action="Editar" asp-route-IdProducto="@producto.IdProducto" class="btn  btn-dark mx-1"><i class="fa fa-pencil"></i> Editar</a>
                         </td>
                         <td class="">
                             <form id="formEliminarProducto" method="post" action="@Url.Action("Eliminar", "AdminProducto")">
                                 @Html.Hidden("IdProducto", producto.IdProducto)
-                                <button type="submit" class="btn btn-sm btn-danger"><i class=""></i> Eliminar</button>
+                                <button type="submit" class="btn  btn-danger"><i class=""></i> Desactivar</button>
                             </form>
                         </td>
                     </tr>

@@ -33,6 +33,7 @@ public class CarritoActionFilter : IAsyncActionFilter
                 
 
                     Console.WriteLine("El valor es: " + Carrito.UsuarioId);
+                //trae todos los productos del carrito
                     var CarritoDetalle = await _carService.detallesCarrito(Carrito);
                     Console.WriteLine("El valor es: SOY DESDE EL FILTROO " + usuarioID);
 

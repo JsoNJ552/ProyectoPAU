@@ -12,12 +12,6 @@
 
       
 
-        <div>
-            <td class="position-relative">
-                <button type="button" class="btn btn-sm btn-light"><a href="@Url.Action("Agregar","AdminProducto")" class="fa fa-trash">Agregar</a> </button>
-            </td>
-
-        </div>
 
 
 
@@ -41,7 +35,7 @@
                     <th scope="col" width="20%">Precio</th>
 
                     <th scope="col" width="20%"><span>detalles</span></th>
-                    <th scope="col" width="20%"><span>Eliminar</span></th>
+         
                 </tr>
             </thead>
             <tbody>
@@ -60,12 +54,7 @@
 
                         <td> <a href="@Url.Action("VerDetalleFactura", "AdminFacturas", new {idVenta = producto.VentaId })" class="btn  btn-dark">Detalles</a>   </td>
 
-                        <td class="">
-                            <form id="formEliminarProducto" method="post" action="@Url.Action("Eliminar", "AdminProducto")">
-
-                                <button type="submit" class="btn  btn-danger">Eliminar</button>
-                            </form>
-                        </td>
+                       
                     </tr>
                 }
 

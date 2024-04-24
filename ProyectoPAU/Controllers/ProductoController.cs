@@ -67,6 +67,9 @@ namespace ProyectoPAU.Controllers
             try
             {
 
+
+
+
                 var producto = await _productService.obtenerProductosPorId(Venta);
 
                 if (!string.IsNullOrEmpty(producto.Foto))

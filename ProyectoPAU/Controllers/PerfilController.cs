@@ -31,6 +31,19 @@ namespace ProyectoPAU.Controllers
 
             try
             {
+                var carritoDetalle = HttpContext.Items["Carrito"] as List<CarritoDetalle>;
+                ViewData["Carrito"] = carritoDetalle;
+
+                int cantidadProductosCarro = 0;
+                foreach (var cantidadProductosCarrito in carritoDetalle as List<CarritoDetalle>)
+                {
+                    cantidadProductosCarro = cantidadProductosCarro + (int)cantidadProductosCarrito.Cantidad;
+
+                }
+
+                ViewData["CantidadProductos"] = cantidadProductosCarro;
+
+
                 var idUsuario = HttpContext.Session.GetInt32("idUsuario");
                 var email = HttpContext.Session.GetString("Email");
                 var apellido = HttpContext.Session.GetString("Apellido");
